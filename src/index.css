@@ -1,0 +1,365 @@
+:root {
+  --bg: #0a1428;
+  --bg-panel: #10233f;
+  --bg-panel-2: #0f1c33;
+  --border: #1e3a5f;
+  --border-soft: #17304f;
+  --gold: #c8aa6e;
+  --gold-bright: #f0e6d2;
+  --blue: #0596aa;
+  --blue-bright: #0ac8e6;
+  --win: #2ec77e;
+  --loss: #e84057;
+  --text: #cddcea;
+  --text-dim: #7a8fa6;
+
+  color-scheme: dark;
+  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background:
+    radial-gradient(1200px 600px at 50% -200px, #14294a 0%, transparent 70%),
+    var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+.app {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 24px 16px 48px;
+}
+
+.centered-msg {
+  text-align: center;
+  padding: 80px 16px;
+  color: var(--text-dim);
+}
+.centered-msg.error {
+  color: var(--loss);
+}
+.error-detail {
+  color: var(--text-dim);
+  font-size: 0.85rem;
+}
+
+/* ---------- Progress header ---------- */
+.progress-header {
+  background: linear-gradient(180deg, var(--bg-panel) 0%, var(--bg-panel-2) 100%);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 20px 22px;
+  margin-bottom: 20px;
+}
+
+.progress-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.progress-header h1 {
+  margin: 0;
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.6rem;
+  color: var(--gold-bright);
+  letter-spacing: 0.5px;
+}
+.subtitle {
+  margin: 4px 0 0;
+  color: var(--text-dim);
+  font-size: 0.9rem;
+}
+
+.reset-btn {
+  background: transparent;
+  color: var(--text-dim);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 6px 12px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  white-space: nowrap;
+}
+.reset-btn:hover {
+  border-color: var(--loss);
+  color: var(--loss);
+}
+
+.progress-bar {
+  position: relative;
+  height: 26px;
+  background: var(--bg-panel-2);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  margin: 18px 0 16px;
+  overflow: hidden;
+}
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--blue) 0%, var(--gold) 100%);
+  transition: width 0.35s ease;
+}
+.progress-label {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--gold-bright);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.6);
+}
+
+.stat-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 0;
+}
+.stat {
+  background: var(--bg-panel-2);
+  border: 1px solid var(--border-soft);
+  border-radius: 8px;
+  padding: 10px 12px;
+  text-align: center;
+}
+.stat dt {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+}
+.stat dd {
+  margin: 4px 0 0;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--gold-bright);
+}
+.stat-win {
+  color: var(--win) !important;
+}
+.stat-loss {
+  color: var(--loss) !important;
+}
+.stat-next dd {
+  font-size: 1rem;
+  color: var(--blue-bright) !important;
+}
+
+/* ---------- Toolbar ---------- */
+.toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  flex-wrap: wrap;
+}
+.filter-tabs {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+.tab {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 6px 14px;
+  border-radius: 999px;
+  cursor: pointer;
+  font-size: 0.82rem;
+}
+.tab:hover {
+  color: var(--text);
+}
+.tab.is-active {
+  background: var(--gold);
+  color: #0a1428;
+  border-color: var(--gold);
+  font-weight: 600;
+}
+.search {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 7px 12px;
+  border-radius: 8px;
+  font-size: 0.85rem;
+  min-width: 160px;
+}
+.search::placeholder {
+  color: var(--text-dim);
+}
+
+/* ---------- Champion list ---------- */
+.champ-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.champ-card {
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px 14px;
+  transition: border-color 0.2s, opacity 0.2s;
+}
+.champ-card.is-completed {
+  border-color: var(--gold);
+  background: linear-gradient(180deg, var(--bg-panel) 0%, rgba(200, 170, 110, 0.06) 100%);
+}
+
+.champ-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.champ-index {
+  width: 26px;
+  text-align: center;
+  color: var(--text-dim);
+  font-size: 0.8rem;
+  font-variant-numeric: tabular-nums;
+}
+.champ-icon {
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  flex-shrink: 0;
+}
+.is-completed .champ-icon {
+  border-color: var(--gold);
+}
+.champ-name {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  min-width: 0;
+}
+.champ-name-main {
+  font-weight: 600;
+  color: var(--gold-bright);
+}
+.champ-title {
+  font-size: 0.78rem;
+  color: var(--text-dim);
+  text-transform: capitalize;
+}
+
+.champ-complete {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--text-dim);
+  cursor: pointer;
+  user-select: none;
+}
+.champ-complete input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--gold);
+  cursor: pointer;
+}
+
+.champ-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  margin-top: 12px;
+  padding-top: 12px;
+  padding-left: 38px;
+  border-top: 1px solid var(--border-soft);
+  align-items: center;
+}
+.control-group {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+}
+.control-row {
+  display: flex;
+  gap: 8px;
+  flex: 1;
+  min-width: 200px;
+}
+
+.pill {
+  background: var(--bg-panel-2);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 0.76rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+.pill:hover {
+  color: var(--text);
+}
+.pill.role.is-active {
+  background: var(--blue);
+  border-color: var(--blue-bright);
+  color: #fff;
+}
+.pill.result-win.is-active {
+  background: var(--win);
+  border-color: var(--win);
+  color: #06210f;
+  font-weight: 600;
+}
+.pill.result-loss.is-active {
+  background: var(--loss);
+  border-color: var(--loss);
+  color: #2a060c;
+  font-weight: 600;
+}
+
+.champ-date,
+.champ-notes {
+  background: var(--bg-panel-2);
+  border: 1px solid var(--border);
+  color: var(--text);
+  padding: 5px 9px;
+  border-radius: 6px;
+  font-size: 0.8rem;
+}
+.champ-date {
+  color-scheme: dark;
+}
+.champ-notes {
+  flex: 1;
+  min-width: 0;
+}
+.champ-notes::placeholder {
+  color: var(--text-dim);
+}
+
+/* ---------- Footer ---------- */
+.app-footer {
+  margin-top: 28px;
+  text-align: center;
+  font-size: 0.72rem;
+  color: var(--text-dim);
+}
+
+@media (max-width: 560px) {
+  .stat-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .champ-controls {
+    padding-left: 0;
+  }
+}
