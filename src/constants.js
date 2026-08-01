@@ -8,16 +8,22 @@ export const ROLES = [
   { key: 'support', label: 'Support' },
 ]
 
-export const RESULTS = [
-  { key: 'win', label: 'Win' },
-  { key: 'loss', label: 'Loss' },
+// Champion classes, as they appear in Data Dragon's `tags`. Used to scope a
+// run's champion pool (e.g. a Marksman-only A–Z).
+export const CLASSES = [
+  { key: 'Fighter', label: 'Fighter' },
+  { key: 'Tank', label: 'Tank' },
+  { key: 'Mage', label: 'Mage' },
+  { key: 'Assassin', label: 'Assassin' },
+  { key: 'Marksman', label: 'Marksman' },
+  { key: 'Support', label: 'Support' },
 ]
 
 // Filter options for the champion list.
 export const FILTERS = [
   { key: 'all', label: 'All' },
   { key: 'remaining', label: 'Remaining' },
+  { key: 'inprogress', label: 'In progress' },
   { key: 'completed', label: 'Completed' },
-  { key: 'wins', label: 'Wins' },
-  { key: 'losses', label: 'Losses' },
+  { key: 'won', label: 'Won' },
 ]

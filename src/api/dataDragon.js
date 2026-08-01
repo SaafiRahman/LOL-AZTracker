@@ -7,8 +7,20 @@ const cdn = (version) => `https://ddragon.leagueoflegends.com/cdn/${version}`
 
 // Cache the resolved version + champion list in localStorage so we don't
 // re-hit the network on every load. Data Dragon changes ~every two weeks.
-const CACHE_KEY = 'az-tracker:ddragon:v2'
+const CACHE_KEY = 'az-tracker:ddragon:v3'
 const CACHE_TTL_MS = 1000 * 60 * 60 * 24 // 24h
+
+// A cache is only usable if it has the fields the current app expects. This
+// self-heals stale caches written by an older shape (e.g. before `tags` existed)
+// without needing a version bump or manual clearing.
+function isValidCache(parsed) {
+  return (
+    parsed &&
+    Array.isArray(parsed.champions) &&
+    parsed.champions.length > 0 &&
+    parsed.champions.every((c) => Array.isArray(c.tags))
+  )
+}
 
 function readCache() {
   try {
@@ -16,6 +28,7 @@ function readCache() {
     if (!raw) return null
     const parsed = JSON.parse(raw)
     if (Date.now() - parsed.fetchedAt > CACHE_TTL_MS) return null
+    if (!isValidCache(parsed)) return null
     return parsed
   } catch {
     return null
@@ -66,6 +79,7 @@ export async function fetchChampions() {
       key: c.key, // numeric id as string
       name: c.name, // display name, e.g. "Aatrox"
       title: c.title, // e.g. "the Darkin Blade"
+      tags: c.tags ?? [], // classes, e.g. ["Fighter","Tank"] — used for pool filtering
       iconUrl: `${cdn(version)}/img/champion/${c.image.full}`,
     }))
     .sort((a, b) => a.name.localeCompare(b.name))

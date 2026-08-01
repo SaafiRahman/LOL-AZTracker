@@ -1,10 +1,28 @@
-// Top-of-page summary: overall completion, win/loss record, and the next
-// champion still to play in A→Z order.
-export default function ProgressHeader({ stats, nextChampion, onReset }) {
-  const { total, completed, wins, losses } = stats
+import { COMPLETION_MODES } from '../run.js'
+import { CLASSES } from '../constants.js'
+
+// Top-of-page summary: overall completion, win/game record, the next champion
+// still to play in A→Z order, and the run's completion-mode + champion-pool config.
+export default function ProgressHeader({
+  stats,
+  nextChampion,
+  mode,
+  onModeChange,
+  classFilter,
+  onClassFilterChange,
+  onReset,
+  auth,
+  syncing,
+}) {
+  const toggleClass = (key) =>
+    onClassFilterChange(
+      classFilter.includes(key)
+        ? classFilter.filter((k) => k !== key)
+        : [...classFilter, key],
+    )
+
+  const { total, completed, won, totalGames, avgGamesToWin, avgFun } = stats
   const pct = total ? Math.round((completed / total) * 100) : 0
-  const games = wins + losses
-  const winRate = games ? Math.round((wins / games) * 100) : 0
 
   return (
     <header className="progress-header">
@@ -13,9 +31,76 @@ export default function ProgressHeader({ stats, nextChampion, onReset }) {
           <h1>A–Z Challenge Tracker</h1>
           <p className="subtitle">Play every champion, in alphabetical order.</p>
         </div>
-        <button type="button" className="reset-btn" onClick={onReset}>
-          Reset run
-        </button>
+        <div className="header-actions">
+          {auth.firebaseEnabled &&
+            (auth.user ? (
+              <div className="account">
+                <span className="sync-dot" title={syncing ? 'Syncing…' : 'Synced to cloud'}>
+                  {syncing ? '↻ Syncing' : '✓ Synced'}
+                </span>
+                {auth.user.photoURL && (
+                  <img className="avatar" src={auth.user.photoURL} alt="" width={26} height={26} />
+                )}
+                <button type="button" className="reset-btn" onClick={auth.logout}>
+                  Sign out
+                </button>
+              </div>
+            ) : (
+              <button type="button" className="signin-btn" onClick={auth.login}>
+                Sign in with Google
+              </button>
+            ))}
+          <button type="button" className="reset-btn" onClick={onReset}>
+            Reset run
+          </button>
+        </div>
+      </div>
+
+      {auth.firebaseEnabled && !auth.user && (
+        <p className="signin-hint">
+          Playing locally on this device. Sign in to sync your run across devices.
+        </p>
+      )}
+
+      <div className="mode-row">
+        <span className="mode-label">Complete a champion on:</span>
+        <div className="mode-toggle" role="group" aria-label="Completion mode">
+          {COMPLETION_MODES.map((m) => (
+            <button
+              key={m.key}
+              type="button"
+              className={`mode-btn${mode === m.key ? ' is-active' : ''}`}
+              onClick={() => onModeChange(m.key)}
+              title={m.hint}
+            >
+              {m.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      <div className="pool-row">
+        <span className="mode-label">Champion pool:</span>
+        <div className="class-chips" role="group" aria-label="Champion classes">
+          {CLASSES.map((c) => (
+            <button
+              key={c.key}
+              type="button"
+              className={`chip${classFilter.includes(c.key) ? ' is-active' : ''}`}
+              onClick={() => toggleClass(c.key)}
+            >
+              {c.label}
+            </button>
+          ))}
+          {classFilter.length > 0 && (
+            <button type="button" className="chip clear" onClick={() => onClassFilterChange([])}>
+              Clear (all)
+            </button>
+          )}
+        </div>
+        <span className="pool-count">
+          {classFilter.length ? `${stats.total} champions` : 'All champions'}
+        </span>
       </div>
 
       <div className="progress-bar" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
@@ -27,16 +112,20 @@ export default function ProgressHeader({ stats, nextChampion, onReset }) {
 
       <dl className="stat-row">
         <div className="stat">
-          <dt>Wins</dt>
-          <dd className="stat-win">{wins}</dd>
+          <dt>Won</dt>
+          <dd className="stat-win">{won}</dd>
         </div>
         <div className="stat">
-          <dt>Losses</dt>
-          <dd className="stat-loss">{losses}</dd>
+          <dt>Total games</dt>
+          <dd>{totalGames}</dd>
         </div>
         <div className="stat">
-          <dt>Win rate</dt>
-          <dd>{games ? `${winRate}%` : '—'}</dd>
+          <dt>Avg games / win</dt>
+          <dd>{avgGamesToWin != null ? avgGamesToWin.toFixed(1) : '—'}</dd>
+        </div>
+        <div className="stat">
+          <dt>Avg fun</dt>
+          <dd className="stat-fun">{avgFun != null ? `${avgFun.toFixed(1)} ★` : '—'}</dd>
         </div>
         <div className="stat stat-next">
           <dt>Up next</dt>
