@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { ROLES } from '../constants.js'
 import { isComplete, statusText, firstWinIndex } from '../run.js'
 import StarRating from './StarRating.jsx'
@@ -18,6 +19,7 @@ export default function ChampionCard({
   const { games, role, notes, rating } = entry
   const complete = isComplete(entry, mode)
   const winIdx = firstWinIndex(entry)
+  const [open, setOpen] = useState(false)
 
   return (
     <li className={`champ-card${complete ? ' is-completed' : ''}`}>
@@ -48,67 +50,85 @@ export default function ChampionCard({
         </label>
       </div>
 
-      <div className="champ-controls">
-        <div className="game-add">
-          <span className="game-add-label">Log a game:</span>
-          <button type="button" className="pill win" onClick={() => onAddGame('win')}>
-            + Win
-          </button>
-          <button type="button" className="pill loss" onClick={() => onAddGame('loss')}>
-            + Loss
-          </button>
-          <span className="games-status">{statusText(entry)}</span>
-        </div>
+      <div className="champ-quick">
+        <span className="game-add-label">Log a game</span>
+        <button type="button" className="pill win" onClick={() => onAddGame('win')}>
+          + Win
+        </button>
+        <button type="button" className="pill loss" onClick={() => onAddGame('loss')}>
+          + Loss
+        </button>
+        <span className="games-status">{statusText(entry)}</span>
+      </div>
 
-        {games.length > 0 && (
-          <ol className="game-log">
-            {games.map((g, i) => (
-              <li key={g.id} className={`game-row game-${g.result}`}>
-                <span className="game-num">#{i + 1}</span>
-                <span className={`game-badge badge-${g.result}`}>
-                  {g.result === 'win' ? 'Win' : 'Loss'}
-                </span>
-                {i === winIdx && <span className="game-flag">🏆 win game</span>}
-                <input
-                  type="date"
-                  className="game-date"
-                  value={g.date ?? ''}
-                  onChange={(e) => onUpdateGame(g.id, { date: e.target.value || null })}
-                  aria-label={`Date of game ${i + 1} for ${champion.name}`}
-                />
-                {g.source === 'riot' && <span className="game-source">from Riot</span>}
-                <button
-                  type="button"
-                  className="game-remove"
-                  aria-label={`Remove game ${i + 1} for ${champion.name}`}
-                  onClick={() => onRemoveGame(g.id)}
-                >
-                  ×
-                </button>
-              </li>
+      <div className="champ-more">
+        <button
+          type="button"
+          className={`champ-more-summary${open ? ' is-open' : ''}`}
+          onClick={() => setOpen((o) => !o)}
+          aria-expanded={open}
+        >
+          <span className="champ-more-chevron" aria-hidden="true">▾</span>
+          <span className="champ-more-label">
+            {games.length > 0 ? `Game log · ${games.length}` : 'Details & notes'}
+          </span>
+        </button>
+
+        <div className={`champ-more-collapse${open ? ' is-open' : ''}`}>
+          <div className="champ-more-inner">
+            <div className="champ-more-body">
+          {games.length > 0 && (
+            <ol className="game-log">
+              {games.map((g, i) => (
+                <li key={g.id} className={`game-row game-${g.result}`}>
+                  <span className="game-num">#{i + 1}</span>
+                  <span className={`game-badge badge-${g.result}`}>
+                    {g.result === 'win' ? 'Win' : 'Loss'}
+                  </span>
+                  {i === winIdx && <span className="game-flag">🏆 win game</span>}
+                  <input
+                    type="date"
+                    className="game-date"
+                    value={g.date ?? ''}
+                    onChange={(e) => onUpdateGame(g.id, { date: e.target.value || null })}
+                    aria-label={`Date of game ${i + 1} for ${champion.name}`}
+                  />
+                  {g.source === 'riot' && <span className="game-source">from Riot</span>}
+                  <button
+                    type="button"
+                    className="game-remove"
+                    aria-label={`Remove game ${i + 1} for ${champion.name}`}
+                    onClick={() => onRemoveGame(g.id)}
+                  >
+                    ×
+                  </button>
+                </li>
+              ))}
+            </ol>
+          )}
+
+          <div className="control-group" role="group" aria-label="Role">
+            {ROLES.map((r) => (
+              <button
+                key={r.key}
+                type="button"
+                className={`pill role${role === r.key ? ' is-active' : ''}`}
+                onClick={() => onChange({ role: role === r.key ? null : r.key })}
+              >
+                {r.label}
+              </button>
             ))}
-          </ol>
-        )}
-
-        <div className="control-group" role="group" aria-label="Role">
-          {ROLES.map((r) => (
-            <button
-              key={r.key}
-              type="button"
-              className={`pill role${role === r.key ? ' is-active' : ''}`}
-              onClick={() => onChange({ role: role === r.key ? null : r.key })}
-            >
-              {r.label}
-            </button>
-          ))}
-          <input
-            type="text"
-            className="champ-notes"
-            placeholder="Notes…"
-            value={notes}
-            onChange={(e) => onChange({ notes: e.target.value })}
-            aria-label={`Notes for ${champion.name}`}
-          />
+            <input
+              type="text"
+              className="champ-notes"
+              placeholder="Notes…"
+              value={notes}
+              onChange={(e) => onChange({ notes: e.target.value })}
+              aria-label={`Notes for ${champion.name}`}
+            />
+            </div>
+            </div>
+          </div>
         </div>
       </div>
     </li>
