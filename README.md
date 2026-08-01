@@ -64,8 +64,25 @@ RIOT_API_KEY=RGAPI-...
 Get a Development key at [developer.riotgames.com](https://developer.riotgames.com) (it
 expires every 24h). **Restart the dev server** after changing it. In dev, requests go through
 a Vite middleware proxy ([`vite.config.js`](vite.config.js) → [`server/riot.js`](server/riot.js))
-so the key stays off the client. For production, port that same handler to a serverless
-function (Cloudflare Worker / Vercel) — the core logic in `server/riot.js` is host-agnostic.
+so the key stays off the client. In production the same logic runs as a Vercel serverless
+function ([`api/riot/matches.js`](api/riot/matches.js)) — same `/api/riot/matches` contract,
+so the client is unchanged.
+
+## Deploying (Vercel)
+
+The app + Riot proxy deploy together on Vercel's free tier:
+
+1. Import the GitHub repo at [vercel.com](https://vercel.com/new) (framework auto-detects as
+   Vite; build `npm run build`, output `dist`). `/api/*` files become serverless functions.
+2. Add **Environment Variables** in the Vercel project (all `VITE_FIREBASE_*` from your `.env`,
+   plus `RIOT_API_KEY`). The `VITE_` ones are baked into the client build; `RIOT_API_KEY`
+   stays server-side in the function.
+3. After the first deploy, add the Vercel domain (e.g. `your-app.vercel.app`) to
+   **Firebase Console → Authentication → Settings → Authorized domains** so Google sign-in works.
+
+`vercel.json` sets the import function's `maxDuration` to 60s (the paginated by-date import
+fetches match details sequentially to respect Riot's rate limit). For a public site, apply for
+a non-expiring Riot **Personal API Key** so import doesn't break every 24h.
 
 ## Getting started
 
