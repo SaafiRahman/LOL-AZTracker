@@ -48,6 +48,9 @@ async function fetchGame(base, apiKey, puuid, matchId) {
   const match = await riotGet(`${base}/lol/match/v5/matches/${matchId}`, apiKey)
   const me = match.info?.participants?.find((p) => p.puuid === puuid)
   if (!me) return null
+  // Skip remakes: an early surrender means the game was cancelled (someone didn't
+  // connect / the /remake vote passed), so it counts as neither a win nor a loss.
+  if (me.gameEndedInEarlySurrender) return null
   return {
     matchId,
     championName: me.championName,

@@ -72,20 +72,25 @@ export default function RiotImport({ account, onImport }) {
     <details className="riot-import">
       <summary>Import games from Riot</summary>
       <div className="riot-body">
-        <div className="riot-id-row">
-          <input
-            className="riot-input name"
-            placeholder="Game name"
-            value={gameName}
-            onChange={(e) => setGameName(e.target.value)}
-          />
-          <span className="riot-hash">#</span>
-          <input
-            className="riot-input tag"
-            placeholder="TAG"
-            value={tagLine}
-            onChange={(e) => setTagLine(e.target.value)}
-          />
+        <div className="riot-id-field">
+          <span className="riot-id-label">Your Riot ID</span>
+          <div className="riot-id-row">
+            <input
+              className="riot-input name"
+              placeholder="Name"
+              aria-label="Riot ID name"
+              value={gameName}
+              onChange={(e) => setGameName(e.target.value)}
+            />
+            <span className="riot-hash">#</span>
+            <input
+              className="riot-input tag"
+              placeholder="TAG"
+              aria-label="Riot ID tagline"
+              value={tagLine}
+              onChange={(e) => setTagLine(e.target.value)}
+            />
+          </div>
         </div>
 
         <div className="riot-options">

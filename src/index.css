@@ -93,6 +93,102 @@ body {
 }
 
 /* ---------- Run bar ---------- */
+/* ---------- Welcome / intro ---------- */
+.welcome {
+  position: relative;
+  border: 1px solid var(--gold-dim);
+  border-radius: 12px;
+  padding: 22px 26px 24px;
+  margin-bottom: 18px;
+  background:
+    radial-gradient(600px 200px at 15% -40%, rgba(200, 170, 110, 0.12), transparent 70%),
+    linear-gradient(180deg, var(--hex-panel) 0%, var(--hex-panel-2) 100%);
+  box-shadow: inset 0 0 0 1px rgba(200, 170, 110, 0.06), 0 8px 30px rgba(0, 0, 0, 0.35);
+}
+.welcome-close {
+  position: absolute;
+  top: 12px;
+  right: 14px;
+  background: transparent;
+  border: none;
+  color: var(--text-faint);
+  font-size: 1.3rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 2px 6px;
+}
+.welcome-close:hover {
+  color: var(--gold);
+}
+.welcome-title {
+  margin: 0 0 8px;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  letter-spacing: 0.5px;
+  color: var(--gold-bright);
+}
+.welcome-lead {
+  margin: 0 0 16px;
+  color: var(--text-dim);
+  max-width: 70ch;
+  line-height: 1.6;
+}
+.welcome-lead strong {
+  color: var(--text);
+}
+.welcome-steps {
+  list-style: none;
+  margin: 0 0 18px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+.welcome-steps li {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  font-size: 0.9rem;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+.welcome-steps strong {
+  color: var(--text);
+}
+.welcome-steps em {
+  font-style: normal;
+  color: var(--gold);
+}
+.welcome-step-num {
+  flex-shrink: 0;
+  width: 26px;
+  height: 26px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--gold-dim);
+  border-radius: 50%;
+  color: var(--gold);
+  font-family: var(--font-alt);
+  font-size: 0.85rem;
+}
+.welcome-got-it {
+  background: linear-gradient(180deg, var(--gold) 0%, var(--gold-mid) 100%);
+  color: #0a1428;
+  border: 1px solid var(--gold);
+  border-radius: 8px;
+  padding: 9px 20px;
+  font-size: 0.88rem;
+  font-weight: 600;
+  font-family: var(--font-alt);
+  letter-spacing: 0.5px;
+  cursor: pointer;
+}
+.welcome-got-it:hover {
+  background: var(--gold-bright);
+  box-shadow: 0 0 16px rgba(200, 170, 110, 0.35);
+}
+
 .run-bar {
   display: flex;
   align-items: center;
@@ -456,6 +552,17 @@ body {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+.riot-id-field {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+.riot-id-label {
+  font-size: 0.72rem;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 .riot-id-row {
   display: flex;

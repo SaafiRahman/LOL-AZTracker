@@ -11,6 +11,9 @@ import ProgressHeader from './components/ProgressHeader.jsx'
 import ChampionCard from './components/ChampionCard.jsx'
 import RunBar from './components/RunBar.jsx'
 import RiotImport from './components/RiotImport.jsx'
+import Welcome from './components/Welcome.jsx'
+
+const INTRO_KEY = 'az-tracker:intro-dismissed'
 
 export default function App() {
   const [champions, setChampions] = useState([])
@@ -23,6 +26,22 @@ export default function App() {
 
   const [filter, setFilter] = useState('all')
   const [search, setSearch] = useState('')
+  const [showIntro, setShowIntro] = useState(() => {
+    try {
+      return localStorage.getItem(INTRO_KEY) !== '1'
+    } catch {
+      return true
+    }
+  })
+
+  function dismissIntro() {
+    setShowIntro(false)
+    try {
+      localStorage.setItem(INTRO_KEY, '1')
+    } catch {
+      // ignore
+    }
+  }
 
   // Load the champion roster once on mount.
   useEffect(() => {
@@ -279,6 +298,8 @@ export default function App() {
 
   return (
     <div className="app">
+      {showIntro && <Welcome onDismiss={dismissIntro} />}
+
       <RunBar
         runs={runList}
         activeRunId={activeRun.id}
