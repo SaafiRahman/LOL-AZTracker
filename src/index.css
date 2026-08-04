@@ -1125,9 +1125,49 @@ body {
 }
 
 @media (max-width: 560px) {
+  .app {
+    padding: 16px 12px 48px;
+  }
+  .progress-header,
+  .welcome {
+    padding: 16px 16px 18px;
+  }
+  .progress-header h1 {
+    font-size: 1.4rem;
+  }
+
+  /* Stack the title and account/actions so 5 signed-in buttons can't overflow. */
+  .progress-top {
+    flex-direction: column;
+    gap: 12px;
+  }
+  .header-actions {
+    justify-content: flex-start;
+    width: 100%;
+  }
+
   .stat-row {
     grid-template-columns: repeat(2, 1fr);
   }
+  .stat-next {
+    grid-column: span 2; /* "Up next" gets its own full-width row */
+  }
+
+  /* Filters + search stack instead of squishing. */
+  .toolbar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .search {
+    width: 100%;
+  }
+
+  /* Riot import: let the button be full-width on its own line. */
+  .riot-import-btn {
+    margin-left: 0;
+    width: 100%;
+  }
+
   .games-status {
     margin-left: 0;
     width: 100%;
