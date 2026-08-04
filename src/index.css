@@ -234,6 +234,23 @@ body {
   border-color: var(--loss);
   color: var(--loss);
 }
+.delete-data-btn {
+  background: transparent;
+  border: 1px solid transparent;
+  color: var(--text-faint);
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 0.74rem;
+  font-family: var(--font-alt);
+  letter-spacing: 0.5px;
+  white-space: nowrap;
+}
+.delete-data-btn:hover {
+  border-color: var(--loss);
+  color: var(--loss);
+  background: rgba(232, 64, 87, 0.08);
+}
 .signin-btn {
   border: 1px solid var(--gold);
   background: linear-gradient(180deg, var(--gold) 0%, var(--gold-mid) 100%);
@@ -986,6 +1003,18 @@ body {
   color: var(--text-faint);
   font-family: var(--font-alt);
   letter-spacing: 0.5px;
+}
+.footer-link {
+  color: var(--gold);
+  text-decoration: none;
+}
+.footer-link:hover {
+  color: var(--gold-bright);
+  text-decoration: underline;
+}
+.footer-sep {
+  margin: 0 8px;
+  color: var(--text-faint);
 }
 
 @media (max-width: 560px) {

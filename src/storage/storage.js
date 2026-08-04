@@ -194,3 +194,12 @@ export function saveStore(store) {
     // best-effort; ignore quota / private-mode failures
   }
 }
+
+// Wipe the locally stored data (used by "Delete my data").
+export function clearStore() {
+  try {
+    localStorage.removeItem(STORE_KEY)
+  } catch {
+    // ignore
+  }
+}

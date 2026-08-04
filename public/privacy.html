@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <title>Privacy Policy · LoL A–Z Challenge Tracker</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #010a13;
+        --panel: #0a1428;
+        --border: #785a28;
+        --gold: #c8aa6e;
+        --gold-bright: #f0e6d2;
+        --text: #cdd6e0;
+        --dim: #a09b8c;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background:
+          radial-gradient(1000px 500px at 50% -200px, #14294a 0%, transparent 70%),
+          var(--bg);
+        color: var(--text);
+        font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+        line-height: 1.65;
+      }
+      .wrap {
+        max-width: 760px;
+        margin: 0 auto;
+        padding: 48px 22px 80px;
+      }
+      .back {
+        display: inline-block;
+        margin-bottom: 28px;
+        color: var(--gold);
+        text-decoration: none;
+        font-size: 0.85rem;
+        letter-spacing: 0.5px;
+      }
+      .back:hover { color: var(--gold-bright); }
+      h1 {
+        font-family: Georgia, 'Times New Roman', serif;
+        color: var(--gold-bright);
+        font-size: 2rem;
+        letter-spacing: 0.5px;
+        margin: 0 0 4px;
+      }
+      .updated { color: var(--dim); font-size: 0.82rem; margin: 0 0 32px; }
+      h2 {
+        color: var(--gold);
+        font-size: 1.1rem;
+        margin: 34px 0 10px;
+        border-bottom: 1px solid rgba(120, 90, 40, 0.4);
+        padding-bottom: 6px;
+      }
+      p, li { color: var(--text); font-size: 0.95rem; }
+      a { color: var(--gold); }
+      ul { padding-left: 22px; }
+      li { margin: 6px 0; }
+      strong { color: var(--gold-bright); }
+      .note {
+        margin-top: 40px;
+        padding: 14px 16px;
+        border: 1px solid rgba(120, 90, 40, 0.5);
+        border-radius: 8px;
+        background: rgba(10, 20, 40, 0.6);
+        font-size: 0.82rem;
+        color: var(--dim);
+      }
+    </style>
+  </head>
+  <body>
+    <div class="wrap">
+      <a class="back" href="/">← Back to the tracker</a>
+      <h1>Privacy Policy</h1>
+      <p class="updated">Last updated: August 2026</p>
+
+      <p>
+        The LoL A–Z Challenge Tracker (“the app”) helps you track your progress in the League of
+        Legends A–Z challenge. This policy explains what data the app handles and why. By using the
+        app, you agree to this policy.
+      </p>
+
+      <h2>Information the app handles</h2>
+      <ul>
+        <li>
+          <strong>Account info</strong> — if you sign in with Google, we receive your name, email
+          address, profile photo, and Google account ID (via Firebase Authentication). This is used
+          only to identify your account and sync your data.
+        </li>
+        <li>
+          <strong>Your challenge data</strong> — the runs you create and their contents: champion
+          progress, per-game win/loss logs, ratings, notes, and settings.
+        </li>
+        <li>
+          <strong>Riot ID &amp; imported matches</strong> — if you use the import feature, the Riot
+          ID you enter (game name, tag, region) and the match data returned by Riot for those games
+          (champion played, win/loss, date). This is stored with your run.
+        </li>
+        <li>
+          <strong>Local storage</strong> — when you are not signed in, your data is kept only in your
+          own browser’s local storage and is not sent anywhere.
+        </li>
+      </ul>
+
+      <h2>How the data is used</h2>
+      <p>
+        Your data is used solely to provide the tracker: showing your progress, saving it, and (when
+        signed in) syncing it across your devices. We do <strong>not</strong> sell your data or use it
+        for advertising or profiling.
+      </p>
+
+      <h2>Third-party services</h2>
+      <ul>
+        <li>
+          <strong>Firebase (Google)</strong> — provides sign-in and cloud storage (Firestore). Your
+          signed-in data is stored on Google Cloud infrastructure and governed by
+          <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google’s Privacy Policy</a>.
+        </li>
+        <li>
+          <strong>Riot Games API</strong> — when you import games, the app’s server requests your
+          match history from Riot on your behalf. Your Riot API usage is subject to Riot’s policies.
+        </li>
+      </ul>
+
+      <h2>Data storage and security</h2>
+      <p>
+        Signed-in data is stored in Firestore and readable/writable only by your own authenticated
+        account (enforced by security rules). No system is perfectly secure, but access is scoped to
+        you.
+      </p>
+
+      <h2>Your choices and data deletion</h2>
+      <ul>
+        <li>You can clear a single run’s progress at any time with “Reset run.”</li>
+        <li>You can sign out to stop cloud sync and use the app locally only.</li>
+        <li>
+          <strong>Delete my data</strong> — when signed in, the “Delete my data” button (next to
+          Sign out) <strong>permanently and immediately erases all of your runs and stored data from
+          the cloud</strong>, and signs you out. This is fully self-service; no request or waiting
+          period is needed.
+        </li>
+      </ul>
+
+      <h2>Cookies and local storage</h2>
+      <p>
+        The app uses browser local storage to save your progress and standard authentication tokens
+        to keep you signed in. It does not use third-party advertising or tracking cookies.
+      </p>
+
+      <h2>Children’s privacy</h2>
+      <p>
+        The app is not directed at children under 13 and does not knowingly collect their personal
+        information.
+      </p>
+
+      <h2>Changes to this policy</h2>
+      <p>
+        This policy may be updated over time. Material changes will be reflected by updating the date
+        at the top of this page.
+      </p>
+
+      <h2>Managing your data</h2>
+      <p>
+        Because you can view and erase all of your data yourself within the app — “Reset run” for a
+        single run, and “Delete my data” to remove everything — there is no separate data-request
+        process. Deletion takes effect immediately.
+      </p>
+
+      <p style="margin-top: 40px; color: var(--dim); font-size: 0.82rem">
+        LoL A–Z Challenge Tracker isn’t endorsed by Riot Games and doesn’t reflect the views or
+        opinions of Riot Games or anyone officially involved in producing or managing Riot Games
+        properties. Riot Games and all associated properties are trademarks or registered trademarks
+        of Riot Games, Inc.
+      </p>
+    </div>
+  </body>
+</html>

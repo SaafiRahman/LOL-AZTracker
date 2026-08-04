@@ -90,6 +90,21 @@ export default function App() {
     store.resetActiveRun()
   }
 
+  async function handleDeleteData() {
+    if (
+      !window.confirm(
+        'Permanently delete ALL your data — every run — from the cloud and this device?\n\nThis cannot be undone. You will be signed out.',
+      )
+    )
+      return
+    try {
+      await store.deleteAccountData()
+      await auth.logout()
+    } catch (e) {
+      window.alert(`Could not delete your data: ${e.message}`)
+    }
+  }
+
   // --- run management ---
   function handleNewRun() {
     const name = window.prompt('Name this run:', `Run ${runList.length + 1}`)
@@ -281,6 +296,7 @@ export default function App() {
         classFilter={activeRun.classFilter}
         onClassFilterChange={store.setClassFilter}
         onReset={handleReset}
+        onDeleteData={handleDeleteData}
         auth={auth}
         syncing={syncing}
       />
@@ -330,7 +346,9 @@ export default function App() {
       )}
 
       <footer className="app-footer">
-        Champion data & images © Riot Games, via Data Dragon. Not endorsed by Riot Games.
+        <a href="/privacy.html" className="footer-link">Privacy Policy</a>
+        <span className="footer-sep">·</span>
+        Champion data &amp; images © Riot Games, via Data Dragon. Not endorsed by Riot Games.
       </footer>
     </div>
   )

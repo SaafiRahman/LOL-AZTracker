@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { doc, onSnapshot, setDoc } from 'firebase/firestore'
+import { doc, onSnapshot, setDoc, deleteDoc } from 'firebase/firestore'
 import { db, firebaseEnabled } from './firebase.js'
-import { loadStore, saveStore, normalizeStore, createRun } from './storage/storage.js'
+import { loadStore, saveStore, clearStore, normalizeStore, createRun } from './storage/storage.js'
 
 const WRITE_DEBOUNCE_MS = 600
 
@@ -21,6 +21,7 @@ export function useStore(user) {
   const cloud = Boolean(user && firebaseEnabled)
   const storeRef = useRef(store) // always-current snapshot for debounced writes
   const writeTimer = useRef(null)
+  const deletingRef = useRef(false) // true while "Delete my data" is wiping the cloud doc
 
   const applyStore = useCallback((next) => {
     storeRef.current = next
@@ -30,6 +31,7 @@ export function useStore(user) {
   // Load (local) or subscribe (cloud) whenever the signed-in user changes.
   useEffect(() => {
     setReady(false)
+    deletingRef.current = false // reset on any auth change so re-login seeds normally
 
     if (!cloud) {
       applyStore(loadStore())
@@ -44,6 +46,11 @@ export function useStore(user) {
       (snap) => {
         if (snap.exists()) {
           applyStore(normalizeStore(snap.data()))
+          setReady(true)
+        } else if (deletingRef.current) {
+          // Doc was just wiped via "Delete my data" — show a clean empty store
+          // and do NOT re-seed a replacement doc.
+          applyStore(normalizeStore(null))
           setReady(true)
         } else if (!seeded) {
           seeded = true
@@ -164,6 +171,26 @@ export function useStore(user) {
     [commit],
   )
 
+  // Permanently delete all of the user's stored data. Wipes local storage and,
+  // when signed in, deletes the Firestore doc (must run while authenticated —
+  // security rules allow deleting only your own doc). Callers typically sign the
+  // user out afterward.
+  const deleteAccountData = useCallback(async () => {
+    if (writeTimer.current) clearTimeout(writeTimer.current) // cancel any pending write
+    clearStore()
+    if (cloud) {
+      deletingRef.current = true
+      try {
+        await deleteDoc(doc(db, 'users', user.uid))
+      } catch (e) {
+        deletingRef.current = false
+        throw e
+      }
+    } else {
+      applyStore(normalizeStore(null))
+    }
+  }, [cloud, user?.uid, applyStore])
+
   const activeRun = store.runs[store.activeRunId] ?? null
   const runList = Object.values(store.runs).sort((a, b) => a.createdAt - b.createdAt)
 
@@ -181,6 +208,7 @@ export function useStore(user) {
     setCompletionMode,
     setClassFilter,
     resetActiveRun,
+    deleteAccountData,
     ready,
     syncing,
   }

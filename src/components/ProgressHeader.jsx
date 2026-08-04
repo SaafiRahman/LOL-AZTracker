@@ -11,6 +11,7 @@ export default function ProgressHeader({
   classFilter,
   onClassFilterChange,
   onReset,
+  onDeleteData,
   auth,
   syncing,
 }) {
@@ -43,6 +44,14 @@ export default function ProgressHeader({
                 )}
                 <button type="button" className="reset-btn" onClick={auth.logout}>
                   Sign out
+                </button>
+                <button
+                  type="button"
+                  className="delete-data-btn"
+                  onClick={onDeleteData}
+                  title="Permanently delete all your data"
+                >
+                  Delete my data
                 </button>
               </div>
             ) : (
