@@ -32,12 +32,20 @@ function normalizeRating(r) {
   return Math.round(r * 2) / 2
 }
 
+// A K/D/A value: a non-negative integer, or null if unset.
+function normalizeStat(v) {
+  return Number.isFinite(v) && v >= 0 ? Math.floor(v) : null
+}
+
 function normalizeGame(g) {
   const game = {
     id: g.id ?? uid(),
     result: g.result === 'win' ? 'win' : 'loss',
     date: g.date ?? null,
     source: g.source === 'riot' ? 'riot' : 'manual',
+    kills: normalizeStat(g.kills),
+    deaths: normalizeStat(g.deaths),
+    assists: normalizeStat(g.assists),
   }
   // Riot-imported games carry a matchId used for de-duplication.
   if (g.matchId) game.matchId = g.matchId

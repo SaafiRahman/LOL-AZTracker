@@ -199,6 +199,9 @@ export default function App() {
           date: m.date ? toISODate(m.date) : todayISO(),
           source: 'riot',
           matchId: m.matchId,
+          kills: m.kills,
+          deaths: m.deaths,
+          assists: m.assists,
         }
         next[champ.id] = { ...current, games: [...current.games, game] }
         existing.add(m.matchId)
@@ -224,6 +227,10 @@ export default function App() {
     let winGamesSum = 0
     let ratingSum = 0
     let ratedCount = 0
+    let k = 0
+    let d = 0
+    let a = 0
+    let kdaGames = 0
     for (const champ of pool) {
       const e = runChampions[champ.id]
       if (!e) continue
@@ -237,6 +244,14 @@ export default function App() {
         ratingSum += e.rating
         ratedCount += 1
       }
+      for (const g of e.games) {
+        if (g.kills != null && g.deaths != null && g.assists != null) {
+          k += g.kills
+          d += g.deaths
+          a += g.assists
+          kdaGames += 1
+        }
+      }
     }
     return {
       total: pool.length,
@@ -245,6 +260,8 @@ export default function App() {
       totalGames,
       avgGamesToWin: won ? winGamesSum / won : null,
       avgFun: ratedCount ? ratingSum / ratedCount : null,
+      // KDA ratio (K+A)/D across all games that have full K/D/A.
+      kda: kdaGames ? (k + a) / Math.max(d, 1) : null,
     }
   }, [pool, runChampions, mode])
 

@@ -514,6 +514,9 @@ body {
 .stat-fun {
   color: var(--gold) !important;
 }
+.stat-kda {
+  color: var(--blue-bright) !important;
+}
 .stat-next dd {
   font-size: 1.05rem;
   color: var(--blue-bright) !important;
@@ -900,6 +903,24 @@ body {
   margin-left: auto;
   letter-spacing: 0.3px;
 }
+.champ-kda {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 10px;
+  border: 1px solid var(--gold-line);
+  border-radius: 999px;
+  font-size: 0.74rem;
+  color: var(--blue-bright);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.champ-kda-label {
+  font-size: 0.62rem;
+  letter-spacing: 1px;
+  color: var(--text-faint);
+  text-transform: uppercase;
+}
 
 /* ---------- Pills ---------- */
 .pill {
@@ -1073,6 +1094,87 @@ body {
   color: var(--gold);
   font-size: 0.72rem;
 }
+.game-kda {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+/* K/D/A display (default) — plain text with a pencil that appears on hover. */
+.game-kda-display {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 5px;
+  padding: 2px 7px;
+  cursor: pointer;
+  font-size: 0.76rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--text);
+}
+.game-kda-display:hover,
+.game-kda-display:focus-visible {
+  border-color: var(--gold-line);
+  background: var(--hex-panel);
+}
+.kda-add {
+  color: var(--text-faint);
+}
+.kda-edit-icon {
+  font-size: 0.7rem;
+  color: var(--gold);
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+.game-kda-display:hover .kda-edit-icon,
+.game-kda-display:focus-visible .kda-edit-icon {
+  opacity: 1;
+}
+.kda-done {
+  margin-left: 2px;
+  background: transparent;
+  border: 1px solid var(--gold-line);
+  border-radius: 5px;
+  color: var(--win);
+  cursor: pointer;
+  font-size: 0.78rem;
+  line-height: 1;
+  padding: 3px 8px;
+}
+.kda-done:hover {
+  border-color: var(--win);
+}
+.kda-input {
+  width: 2.6em;
+  background: var(--hex-panel);
+  border: 1px solid var(--gold-line);
+  color: var(--text);
+  padding: 3px 5px;
+  border-radius: 5px;
+  font-size: 0.74rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+.kda-input::placeholder {
+  color: var(--text-faint);
+}
+/* Hide number-input spinners for a cleaner look. */
+.kda-input::-webkit-outer-spin-button,
+.kda-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.kda-input {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+.kda-sep {
+  color: var(--text-faint);
+  font-size: 0.72rem;
+}
+
 .game-date {
   background: var(--hex-panel);
   border: 1px solid var(--gold-line);

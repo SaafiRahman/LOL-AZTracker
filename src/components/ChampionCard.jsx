@@ -1,7 +1,8 @@
 import { useState } from 'react'
 import { ROLES } from '../constants.js'
-import { isComplete, statusText, firstWinIndex } from '../run.js'
+import { isComplete, statusText, firstWinIndex, championKda } from '../run.js'
 import StarRating from './StarRating.jsx'
+import GameRow from './GameRow.jsx'
 
 // A single champion row: icon + name, an "add game" control, the game log, and
 // overall role/notes. `onChange` patches entry-level fields (role/notes/
@@ -19,6 +20,7 @@ export default function ChampionCard({
   const { games, role, notes, rating } = entry
   const complete = isComplete(entry, mode)
   const winIdx = firstWinIndex(entry)
+  const kda = championKda(entry)
   const [open, setOpen] = useState(false)
 
   return (
@@ -58,6 +60,15 @@ export default function ChampionCard({
         <button type="button" className="pill loss" onClick={() => onAddGame('loss')}>
           + Loss
         </button>
+        {kda && (
+          <span
+            className="champ-kda"
+            title={`Average over ${kda.games} game${kda.games === 1 ? '' : 's'} · ${kda.ratio.toFixed(2)} KDA`}
+          >
+            <span className="champ-kda-label">KDA</span>
+            {kda.avgK.toFixed(1)} / {kda.avgD.toFixed(1)} / {kda.avgA.toFixed(1)}
+          </span>
+        )}
         <span className="games-status">{statusText(entry)}</span>
       </div>
 
@@ -80,29 +91,15 @@ export default function ChampionCard({
           {games.length > 0 && (
             <ol className="game-log">
               {games.map((g, i) => (
-                <li key={g.id} className={`game-row game-${g.result}`}>
-                  <span className="game-num">#{i + 1}</span>
-                  <span className={`game-badge badge-${g.result}`}>
-                    {g.result === 'win' ? 'Win' : 'Loss'}
-                  </span>
-                  {i === winIdx && <span className="game-flag">🏆 win game</span>}
-                  <input
-                    type="date"
-                    className="game-date"
-                    value={g.date ?? ''}
-                    onChange={(e) => onUpdateGame(g.id, { date: e.target.value || null })}
-                    aria-label={`Date of game ${i + 1} for ${champion.name}`}
-                  />
-                  {g.source === 'riot' && <span className="game-source">from Riot</span>}
-                  <button
-                    type="button"
-                    className="game-remove"
-                    aria-label={`Remove game ${i + 1} for ${champion.name}`}
-                    onClick={() => onRemoveGame(g.id)}
-                  >
-                    ×
-                  </button>
-                </li>
+                <GameRow
+                  key={g.id}
+                  game={g}
+                  index={i}
+                  isWinGame={i === winIdx}
+                  championName={champion.name}
+                  onUpdateGame={onUpdateGame}
+                  onRemoveGame={onRemoveGame}
+                />
               ))}
             </ol>
           )}

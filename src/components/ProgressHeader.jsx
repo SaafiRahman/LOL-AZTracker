@@ -22,7 +22,7 @@ export default function ProgressHeader({
         : [...classFilter, key],
     )
 
-  const { total, completed, won, totalGames, avgGamesToWin, avgFun } = stats
+  const { total, completed, won, totalGames, avgGamesToWin, avgFun, kda } = stats
   const pct = total ? Math.round((completed / total) * 100) : 0
 
   return (
@@ -135,6 +135,10 @@ export default function ProgressHeader({
         <div className="stat">
           <dt>Avg fun</dt>
           <dd className="stat-fun">{avgFun != null ? `${avgFun.toFixed(1)} ★` : '—'}</dd>
+        </div>
+        <div className="stat">
+          <dt>KDA</dt>
+          <dd className="stat-kda">{kda != null ? `${kda.toFixed(2)}` : '—'}</dd>
         </div>
         <div className="stat stat-next">
           <dt>Up next</dt>

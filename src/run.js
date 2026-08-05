@@ -43,6 +43,31 @@ export function isComplete(entry, mode) {
   return false
 }
 
+// Average K/D/A for a champion across the games that have full stats.
+// Returns null if none do.
+export function championKda(entry) {
+  let k = 0
+  let d = 0
+  let a = 0
+  let n = 0
+  for (const g of entry.games) {
+    if (g.kills != null && g.deaths != null && g.assists != null) {
+      k += g.kills
+      d += g.deaths
+      a += g.assists
+      n += 1
+    }
+  }
+  if (!n) return null
+  return {
+    games: n,
+    avgK: k / n,
+    avgD: d / n,
+    avgA: a / n,
+    ratio: (k + a) / Math.max(d, 1), // (K+A)/D
+  }
+}
+
 // Short human-readable status for a champion's game record.
 export function statusText(entry) {
   if (isWon(entry)) return `Won on game ${gamesToWin(entry)}`
