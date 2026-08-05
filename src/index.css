@@ -823,10 +823,9 @@ body {
   gap: 12px;
   align-items: start;
 }
-/* Single-column view: one centered column at a comfortable reading width. */
+/* Single-column view: one full-width column matching the panels above. */
 .champ-list.list-view {
-  grid-template-columns: minmax(0, 940px);
-  justify-content: center;
+  grid-template-columns: 1fr;
 }
 .champ-card {
   border-radius: 11px;
