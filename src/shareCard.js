@@ -10,7 +10,7 @@ const GOLD_DIM = '#785a28'
 const BLUE = '#0ac8e6'
 const WIN = '#2ee07a'
 const TEXT_DIM = '#a09b8c'
-const SITE = 'lol-az-tracker-zeta.vercel.app'
+const SITE = 'lolazchallenge.xyz'
 
 function roundRect(ctx, x, y, w, h, r) {
   ctx.beginPath()
@@ -34,8 +34,7 @@ function corner(ctx, x, y, dx, dy) {
  * @param canvas  a <canvas> element to draw into
  * @param data    { runName, stats: { total, completed, won, avgGamesToWin, avgFun, kda } }
  */
-export async function renderShareCard(canvas, { runName, stats, ratingLabel }) {
-  const ratingName = (ratingLabel || 'Rating').toUpperCase()
+export async function renderShareCard(canvas, { runName, stats }) {
   // Make sure the display font is ready before measuring/drawing text.
   try {
     await document.fonts.load("700 40px 'Cinzel'")
@@ -119,7 +118,7 @@ export async function renderShareCard(canvas, { runName, stats, ratingLabel }) {
   const tiles = [
     { label: 'WON', value: String(stats.won), color: WIN },
     { label: 'AVG GAMES / WIN', value: stats.avgGamesToWin != null ? stats.avgGamesToWin.toFixed(1) : '—', color: GOLD_BRIGHT },
-    { label: `AVG ${ratingName}`, value: stats.avgFun != null ? `${stats.avgFun.toFixed(1)}★` : '—', color: GOLD },
+    { label: 'AVG RATING', value: stats.avgFun != null ? `${stats.avgFun.toFixed(1)}★` : '—', color: GOLD },
     { label: 'AVG KDA', value: stats.kda != null ? stats.kda.toFixed(2) : '—', color: BLUE },
   ]
   const tileGap = 18

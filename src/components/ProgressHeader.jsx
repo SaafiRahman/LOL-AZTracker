@@ -10,15 +10,12 @@ export default function ProgressHeader({
   onModeChange,
   classFilter,
   onClassFilterChange,
-  ratingLabel,
-  onRatingLabelChange,
   onReset,
   onDeleteData,
   onShare,
   auth,
   syncing,
 }) {
-  const label = ratingLabel || 'Rating'
   const toggleClass = (key) =>
     onClassFilterChange(
       classFilter.includes(key)
@@ -119,19 +116,6 @@ export default function ProgressHeader({
         </span>
       </div>
 
-      <div className="rating-label-row">
-        <span className="mode-label">Star rating tracks:</span>
-        <input
-          className="rating-label-input"
-          value={ratingLabel}
-          maxLength={16}
-          placeholder="Rating"
-          onChange={(e) => onRatingLabelChange(e.target.value)}
-          aria-label="What the star rating measures"
-        />
-        <span className="rating-label-hint">e.g. Fun, Difficulty, Mastery</span>
-      </div>
-
       <div className="progress-bar" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100}>
         <div className="progress-fill" style={{ width: `${pct}%` }} />
         <span className="progress-label">
@@ -153,7 +137,7 @@ export default function ProgressHeader({
           <dd>{avgGamesToWin != null ? avgGamesToWin.toFixed(1) : '—'}</dd>
         </div>
         <div className="stat">
-          <dt>Avg {label}</dt>
+          <dt>Avg Rating</dt>
           <dd className="stat-fun">{avgFun != null ? `${avgFun.toFixed(1)} ★` : '—'}</dd>
         </div>
         <div className="stat">

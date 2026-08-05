@@ -117,10 +117,6 @@ export function useStore(user) {
     (classFilter) => updateActiveRun((run) => ({ ...run, classFilter })),
     [updateActiveRun],
   )
-  const setRatingLabel = useCallback(
-    (ratingLabel) => updateActiveRun((run) => ({ ...run, ratingLabel })),
-    [updateActiveRun],
-  )
   const resetActiveRun = useCallback(
     () => updateActiveRun((run) => ({ ...run, champions: {} })),
     [updateActiveRun],
@@ -211,7 +207,6 @@ export function useStore(user) {
     mutateChampions,
     setCompletionMode,
     setClassFilter,
-    setRatingLabel,
     resetActiveRun,
     deleteAccountData,
     ready,

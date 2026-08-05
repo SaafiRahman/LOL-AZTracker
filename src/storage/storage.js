@@ -109,7 +109,6 @@ export function createRun(name = 'My A–Z run', opts = {}) {
     createdAt: Date.now(),
     completionMode: opts.completionMode === 'any' ? 'any' : 'win',
     classFilter: Array.isArray(opts.classFilter) ? opts.classFilter : [],
-    ratingLabel: typeof opts.ratingLabel === 'string' ? opts.ratingLabel : 'Rating',
     champions: {},
   }
 }
@@ -130,7 +129,6 @@ export function normalizeRun(raw) {
     createdAt: raw?.createdAt ?? base.createdAt,
     completionMode: raw?.completionMode === 'any' ? 'any' : 'win',
     classFilter: Array.isArray(raw?.classFilter) ? raw.classFilter : [],
-    ratingLabel: typeof raw?.ratingLabel === 'string' ? raw.ratingLabel : 'Rating',
     champions: normalizeChampions(raw?.champions),
   }
 }

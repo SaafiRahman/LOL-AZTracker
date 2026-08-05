@@ -12,7 +12,6 @@ export default function ChampionCard({
   entry,
   index,
   mode,
-  ratingLabel,
   onChange,
   onAddGame,
   onRemoveGame,
@@ -41,7 +40,7 @@ export default function ChampionCard({
           <span className="champ-title">{champion.title}</span>
         </div>
 
-        <StarRating value={rating} onChange={(v) => onChange({ rating: v })} label={ratingLabel || 'Rating'} />
+        <StarRating value={rating} onChange={(v) => onChange({ rating: v })} label="Rating" />
 
         <label className="champ-complete">
           <input

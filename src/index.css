@@ -469,31 +469,6 @@ body {
   text-transform: uppercase;
   letter-spacing: 1.5px;
 }
-.rating-label-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-top: 16px;
-  flex-wrap: wrap;
-}
-.rating-label-input {
-  background: var(--hex-navy-2);
-  border: 1px solid var(--gold-line);
-  color: var(--gold-bright);
-  border-radius: 6px;
-  padding: 5px 10px;
-  font-size: 0.82rem;
-  width: 140px;
-}
-.rating-label-input:focus {
-  outline: none;
-  border-color: var(--gold);
-}
-.rating-label-hint {
-  font-size: 0.72rem;
-  color: var(--text-faint);
-  font-style: italic;
-}
 .mode-toggle {
   display: inline-flex;
   background: var(--hex-navy-2);

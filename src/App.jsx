@@ -315,8 +315,6 @@ export default function App() {
     )
   }
 
-  const ratingLabel = activeRun.ratingLabel || 'Rating'
-
   return (
     <div className="app">
       {showIntro && <Welcome onDismiss={dismissIntro} />}
@@ -337,8 +335,6 @@ export default function App() {
         onModeChange={store.setCompletionMode}
         classFilter={activeRun.classFilter}
         onClassFilterChange={store.setClassFilter}
-        ratingLabel={activeRun.ratingLabel}
-        onRatingLabelChange={store.setRatingLabel}
         onReset={handleReset}
         onDeleteData={handleDeleteData}
         onShare={() => setShareOpen(true)}
@@ -347,12 +343,7 @@ export default function App() {
       />
 
       {shareOpen && (
-        <ShareModal
-          runName={activeRun.name}
-          stats={stats}
-          ratingLabel={ratingLabel}
-          onClose={() => setShareOpen(false)}
-        />
+        <ShareModal runName={activeRun.name} stats={stats} onClose={() => setShareOpen(false)} />
       )}
 
       <RiotImport account={store.riotAccount} onImport={handleRiotImport} />
@@ -390,7 +381,6 @@ export default function App() {
               index={pool.indexOf(champ)}
               entry={entryFor(champ.id)}
               mode={mode}
-              ratingLabel={ratingLabel}
               onChange={(patch) => updateEntry(champ.id, patch)}
               onAddGame={(result) => addGame(champ.id, result)}
               onRemoveGame={(gameId) => removeGame(champ.id, gameId)}

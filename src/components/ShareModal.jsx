@@ -2,16 +2,16 @@ import { useEffect, useRef, useState } from 'react'
 import { renderShareCard, canvasToBlob } from '../shareCard.js'
 
 // Renders the progress share card and offers download / copy.
-export default function ShareModal({ runName, stats, ratingLabel, onClose }) {
+export default function ShareModal({ runName, stats, onClose }) {
   const canvasRef = useRef(null)
   const [copied, setCopied] = useState(false)
   const [copyError, setCopyError] = useState(false)
 
   useEffect(() => {
     if (canvasRef.current) {
-      renderShareCard(canvasRef.current, { runName, stats, ratingLabel }).catch(() => {})
+      renderShareCard(canvasRef.current, { runName, stats }).catch(() => {})
     }
-  }, [runName, stats, ratingLabel])
+  }, [runName, stats])
 
   async function handleDownload() {
     const blob = await canvasToBlob(canvasRef.current)
