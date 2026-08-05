@@ -330,6 +330,20 @@ body {
   border-color: var(--loss);
   color: var(--loss);
 }
+.share-open-btn {
+  background: linear-gradient(180deg, #c8aa6e 0%, #b3945a 100%);
+  color: #0a1428;
+  border: 1px solid var(--gold);
+  border-radius: 6px;
+  padding: 6px 16px;
+  cursor: pointer;
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.share-open-btn:hover {
+  background: var(--gold-bright);
+}
 .delete-data-btn {
   background: transparent;
   border: 1px solid transparent;
@@ -341,6 +355,76 @@ body {
   font-family: var(--font-alt);
   letter-spacing: 0.5px;
   white-space: nowrap;
+}
+
+/* ---------- Share modal ---------- */
+.share-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgba(1, 6, 12, 0.82);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.share-modal {
+  background: var(--hex-navy, #0a1428);
+  border: 1px solid var(--gold-dim, #785a28);
+  border-radius: 12px;
+  padding: 18px;
+  max-width: 760px;
+  width: 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+.share-preview {
+  border: 1px solid var(--border-soft, #17304f);
+  border-radius: 8px;
+  overflow: hidden;
+  line-height: 0;
+}
+.share-canvas {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.share-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 14px;
+  flex-wrap: wrap;
+}
+.share-btn {
+  background: transparent;
+  border: 1px solid var(--gold-line, rgba(200, 170, 110, 0.35));
+  color: var(--gold, #c8aa6e);
+  border-radius: 7px;
+  padding: 9px 18px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.share-btn:hover {
+  border-color: var(--gold, #c8aa6e);
+  color: var(--gold-bright, #f0e6d2);
+}
+.share-btn.primary {
+  background: var(--gold, #c8aa6e);
+  color: #0a1428;
+  border-color: var(--gold, #c8aa6e);
+}
+.share-btn.primary:hover {
+  background: var(--gold-bright, #f0e6d2);
+}
+.share-btn.ghost {
+  margin-left: auto;
+  color: var(--text-dim, #7a8fa6);
+  border-color: transparent;
+}
+.share-hint {
+  margin: 10px 0 0;
+  font-size: 0.8rem;
+  color: var(--text-dim, #7a8fa6);
 }
 .delete-data-btn:hover {
   border-color: var(--loss);
@@ -384,6 +468,31 @@ body {
   color: var(--text-dim);
   text-transform: uppercase;
   letter-spacing: 1.5px;
+}
+.rating-label-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 16px;
+  flex-wrap: wrap;
+}
+.rating-label-input {
+  background: var(--hex-navy-2);
+  border: 1px solid var(--gold-line);
+  color: var(--gold-bright);
+  border-radius: 6px;
+  padding: 5px 10px;
+  font-size: 0.82rem;
+  width: 140px;
+}
+.rating-label-input:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+.rating-label-hint {
+  font-size: 0.72rem;
+  color: var(--text-faint);
+  font-style: italic;
 }
 .mode-toggle {
   display: inline-flex;

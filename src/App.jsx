@@ -12,6 +12,7 @@ import ChampionCard from './components/ChampionCard.jsx'
 import RunBar from './components/RunBar.jsx'
 import RiotImport from './components/RiotImport.jsx'
 import Welcome from './components/Welcome.jsx'
+import ShareModal from './components/ShareModal.jsx'
 
 const INTRO_KEY = 'az-tracker:intro-dismissed'
 
@@ -26,6 +27,7 @@ export default function App() {
 
   const [filter, setFilter] = useState('all')
   const [search, setSearch] = useState('')
+  const [shareOpen, setShareOpen] = useState(false)
   const [showIntro, setShowIntro] = useState(() => {
     try {
       return localStorage.getItem(INTRO_KEY) !== '1'
@@ -313,6 +315,8 @@ export default function App() {
     )
   }
 
+  const ratingLabel = activeRun.ratingLabel || 'Rating'
+
   return (
     <div className="app">
       {showIntro && <Welcome onDismiss={dismissIntro} />}
@@ -333,11 +337,23 @@ export default function App() {
         onModeChange={store.setCompletionMode}
         classFilter={activeRun.classFilter}
         onClassFilterChange={store.setClassFilter}
+        ratingLabel={activeRun.ratingLabel}
+        onRatingLabelChange={store.setRatingLabel}
         onReset={handleReset}
         onDeleteData={handleDeleteData}
+        onShare={() => setShareOpen(true)}
         auth={auth}
         syncing={syncing}
       />
+
+      {shareOpen && (
+        <ShareModal
+          runName={activeRun.name}
+          stats={stats}
+          ratingLabel={ratingLabel}
+          onClose={() => setShareOpen(false)}
+        />
+      )}
 
       <RiotImport account={store.riotAccount} onImport={handleRiotImport} />
 
@@ -374,6 +390,7 @@ export default function App() {
               index={pool.indexOf(champ)}
               entry={entryFor(champ.id)}
               mode={mode}
+              ratingLabel={ratingLabel}
               onChange={(patch) => updateEntry(champ.id, patch)}
               onAddGame={(result) => addGame(champ.id, result)}
               onRemoveGame={(gameId) => removeGame(champ.id, gameId)}

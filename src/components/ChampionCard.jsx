@@ -12,6 +12,7 @@ export default function ChampionCard({
   entry,
   index,
   mode,
+  ratingLabel,
   onChange,
   onAddGame,
   onRemoveGame,
@@ -40,7 +41,7 @@ export default function ChampionCard({
           <span className="champ-title">{champion.title}</span>
         </div>
 
-        <StarRating value={rating} onChange={(v) => onChange({ rating: v })} />
+        <StarRating value={rating} onChange={(v) => onChange({ rating: v })} label={ratingLabel || 'Rating'} />
 
         <label className="champ-complete">
           <input
@@ -65,7 +66,7 @@ export default function ChampionCard({
             className="champ-kda"
             title={`Average over ${kda.games} game${kda.games === 1 ? '' : 's'} · ${kda.ratio.toFixed(2)} KDA`}
           >
-            <span className="champ-kda-label">KDA</span>
+            <span className="champ-kda-label">avg kda</span>
             {kda.avgK.toFixed(1)} / {kda.avgD.toFixed(1)} / {kda.avgA.toFixed(1)}
           </span>
         )}
