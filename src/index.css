@@ -57,9 +57,9 @@ body {
 }
 
 .app {
-  max-width: 1200px;
+  max-width: 1800px;
   margin: 0 auto;
-  padding: 22px 24px 60px;
+  padding: 22px 28px 60px;
 }
 
 /* Shared "framed panel" look: hairline gold border + inner bevel + depth. */
@@ -766,6 +766,12 @@ body {
   margin-bottom: 16px;
   flex-wrap: wrap;
 }
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
 .filter-tabs {
   display: flex;
   gap: 6px;
@@ -810,9 +816,17 @@ body {
   list-style: none;
   margin: 0;
   padding: 0;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  /* Responsive columns: as many ~540px cards as fit, 1 per row on narrow
+     screens (min() prevents overflow below 540px). A→Z order stays left-to-right. */
+  grid-template-columns: repeat(auto-fill, minmax(min(540px, 100%), 1fr));
   gap: 12px;
+  align-items: start;
+}
+/* Single-column view: one centered column at a comfortable reading width. */
+.champ-list.list-view {
+  grid-template-columns: minmax(0, 940px);
+  justify-content: center;
 }
 .champ-card {
   border-radius: 11px;

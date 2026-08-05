@@ -28,6 +28,18 @@ export default function App() {
   const [filter, setFilter] = useState('all')
   const [search, setSearch] = useState('')
   const [shareOpen, setShareOpen] = useState(false)
+  const [layout, setLayout] = useState(() =>
+    localStorage.getItem('az-tracker:layout') === 'list' ? 'list' : 'grid',
+  )
+
+  function changeLayout(next) {
+    setLayout(next)
+    try {
+      localStorage.setItem('az-tracker:layout', next)
+    } catch {
+      // ignore private-mode failures
+    }
+  }
   const [showIntro, setShowIntro] = useState(() => {
     try {
       return localStorage.getItem(INTRO_KEY) !== '1'
@@ -361,19 +373,39 @@ export default function App() {
             </button>
           ))}
         </div>
-        <input
-          type="search"
-          className="search"
-          placeholder="Search champion…"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
+        <div className="toolbar-right">
+          <div className="view-toggle mode-toggle" role="group" aria-label="Layout">
+            <button
+              type="button"
+              className={`mode-btn${layout === 'grid' ? ' is-active' : ''}`}
+              onClick={() => changeLayout('grid')}
+              title="Grid (multiple columns)"
+            >
+              ▦ Grid
+            </button>
+            <button
+              type="button"
+              className={`mode-btn${layout === 'list' ? ' is-active' : ''}`}
+              onClick={() => changeLayout('list')}
+              title="Single column"
+            >
+              ☰ List
+            </button>
+          </div>
+          <input
+            type="search"
+            className="search"
+            placeholder="Search champion…"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+        </div>
       </div>
 
       {visibleChampions.length === 0 ? (
         <div className="centered-msg">No champions match this view.</div>
       ) : (
-        <ul className="champ-list">
+        <ul className={`champ-list${layout === 'list' ? ' list-view' : ''}`}>
           {visibleChampions.map((champ) => (
             <ChampionCard
               key={champ.id}
