@@ -422,6 +422,23 @@ export default function App() {
         </ul>
       )}
 
+      <section className="about">
+        <h2>About the League of Legends A–Z Challenge</h2>
+        <p>
+          The League of Legends A–Z challenge is a popular community run where you play every
+          champion, one at a time, in alphabetical order — from Aatrox to Zyra. Many players keep
+          going on each champion until they win a game on them, and it&rsquo;s become a favourite of
+          streamers and completionists looking for a long-term goal.
+        </p>
+        <p>
+          This free A–Z challenge tracker keeps your place through every champion and records how
+          each game went. Enter your Riot ID to auto-import your recent match history — it fills in
+          the champion you played, win or loss, and your KDA automatically — or log games by hand.
+          Track your win/loss record, games-to-win, roles, ratings, and overall progress, and
+          optionally sign in to sync across your devices.
+        </p>
+      </section>
+
       <footer className="app-footer">
         <a href="/privacy.html" className="footer-link">Privacy Policy</a>
         <span className="footer-sep">·</span>
