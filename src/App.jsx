@@ -165,6 +165,8 @@ export default function App() {
             tagLine,
             region,
             queues: opts.queues,
+            type: opts.type,
+            keepMode: opts.keepMode,
             startTime: opts.startTime,
             endTime: opts.endTime,
           })

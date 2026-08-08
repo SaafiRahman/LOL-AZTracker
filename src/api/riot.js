@@ -23,7 +23,9 @@ export const QUEUE_FILTERS = [
   { key: 'ranked_flex', label: 'Ranked Flex', queues: [440], fetchParams: { queue: 440 }, keep: (g) => g.queueId === 440 },
   { key: 'normal_sr', label: "Normal (Summoner's Rift)", queues: [400, 430, 480, 490], fetchParams: { type: 'normal' }, keep: (g) => [400, 430, 480, 490].includes(g.queueId) },
   { key: 'aram', label: 'ARAM', queues: [450], fetchParams: { queue: 450 }, keep: (g) => g.gameMode === 'ARAM' },
-  { key: 'arena', label: 'Arena', queues: [1700, 1710, 1750], fetchParams: { type: 'normal' }, keep: (g) => g.gameMode === 'CHERRY' },
+  // Arena queue ids drift across seasons, so date mode pages by `type: normal`
+  // (which Riot merges) and keeps only Arena (gameMode CHERRY) — catches them all.
+  { key: 'arena', label: 'Arena', queues: [], dateType: 'normal', dateKeepMode: 'CHERRY', fetchParams: { type: 'normal' }, keep: (g) => g.gameMode === 'CHERRY' },
 ]
 
 function messageForStatus(status, fallback) {
@@ -71,9 +73,11 @@ export async function importMatches({ gameName, tagLine, region, count = 20, fet
 }
 
 // "By date" mode: page through the whole range for the given queue ids.
-export async function importMatchesByDate({ gameName, tagLine, region, queues = [], startTime, endTime }) {
+export async function importMatchesByDate({ gameName, tagLine, region, queues = [], type, keepMode, startTime, endTime }) {
   const search = new URLSearchParams({ gameName, tagLine, region, range: 'date' })
   if (queues.length) search.set('queues', queues.join(','))
+  if (type) search.set('type', type)
+  if (keepMode) search.set('keepMode', keepMode)
   if (startTime) search.set('startTime', String(startTime))
   if (endTime) search.set('endTime', String(endTime))
   const data = await callProxy(search)

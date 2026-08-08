@@ -24,6 +24,8 @@ export default async function handler(req, res) {
               .split(',')
               .map((s) => Number(s.trim()))
               .filter(Number.isFinite),
+            type: q.type,
+            keepMode: q.keepMode,
             startTime: q.startTime,
             endTime: q.endTime,
           })

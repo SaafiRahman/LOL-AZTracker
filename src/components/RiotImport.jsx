@@ -50,7 +50,15 @@ export default function RiotImport({ account, onImport }) {
         // Local start-of-day for `from`, end-of-day for `to`; Riot wants seconds.
         const startTime = Math.floor(new Date(`${from}T00:00:00`).getTime() / 1000)
         const endTime = to ? Math.floor(new Date(`${to}T23:59:59`).getTime() / 1000) : undefined
-        summary = await onImport({ mode: 'date', ...id, queues: filter.queues, startTime, endTime })
+        summary = await onImport({
+          mode: 'date',
+          ...id,
+          queues: filter.queues,
+          type: filter.dateType,
+          keepMode: filter.dateKeepMode,
+          startTime,
+          endTime,
+        })
       } else {
         summary = await onImport({
           mode: 'last',

@@ -51,15 +51,20 @@ async function fetchGame(base, apiKey, puuid, matchId) {
   // Skip remakes: an early surrender means the game was cancelled (someone didn't
   // connect / the /remake vote passed), so it counts as neither a win nor a loss.
   if (me.gameEndedInEarlySurrender) return null
+  const gameMode = match.info?.gameMode
+  // In Arena (CHERRY), Riot's `win` flag marks a *top-half* finish, not 1st. For
+  // the "get 1st with every champion" Arena run, only a 1st-place placement counts.
+  const win = gameMode === 'CHERRY' ? me.placement === 1 : !!me.win
   return {
     matchId,
     championName: me.championName,
-    win: !!me.win,
+    win,
+    placement: me.placement ?? null,
     kills: me.kills,
     deaths: me.deaths,
     assists: me.assists,
     queueId: match.info?.queueId,
-    gameMode: match.info?.gameMode,
+    gameMode,
     date: match.info?.gameEndTimestamp ?? match.info?.gameCreation ?? null,
   }
 }
@@ -97,22 +102,39 @@ const DETAIL_CAP = 80
  * Fetching by exact queue id means every detail we spend is a keeper (no wasted
  * Arena fetches for a Summoner's-Rift filter).
  */
-export async function fetchGamesInRange({ apiKey, gameName, tagLine, region, queues = [], startTime, endTime }) {
+export async function fetchGamesInRange({
+  apiKey,
+  gameName,
+  tagLine,
+  region,
+  queues = [],
+  type, // paginate by `type` (e.g. 'normal') instead of queue ids
+  keepMode, // keep only this gameMode (e.g. 'CHERRY' for Arena)
+  startTime,
+  endTime,
+}) {
   assertKey(apiKey)
   const base = host(region)
   const puuid = await resolvePuuid(base, apiKey, gameName, tagLine)
 
-  const queueList = queues.length ? queues : [null] // null → no queue filter (all)
-  const idSet = new Set()
+  // Where to page from: explicit queue ids (efficient — every fetch is a keeper),
+  // or a single `type` that Riot merges across its queues (used for gameMode-based
+  // filters like Arena, whose queue ids drift across seasons), or everything.
+  const sources = queues.length
+    ? queues.map((q) => ['queue', q])
+    : type
+      ? [['type', type]]
+      : [[null, null]]
 
-  for (const q of queueList) {
+  const idSet = new Set()
+  for (const [param, val] of sources) {
     let start = 0
     // Page (100 at a time) until the range is exhausted or we have enough
     // candidates to fill the cap.
     // eslint-disable-next-line no-constant-condition
     while (true) {
       const p = new URLSearchParams({ start: String(start), count: '100' })
-      if (q != null) p.set('queue', String(q))
+      if (param) p.set(param, String(val))
       if (startTime) p.set('startTime', String(startTime))
       if (endTime) p.set('endTime', String(endTime))
       const page = await riotGet(`${base}/lol/match/v5/matches/by-puuid/${puuid}/ids?${p}`, apiKey)
@@ -128,7 +150,9 @@ export async function fetchGamesInRange({ apiKey, gameName, tagLine, region, que
   const games = []
   for (const matchId of ids) {
     const game = await fetchGame(base, apiKey, puuid, matchId)
-    if (game) games.push(game)
+    if (!game) continue
+    if (keepMode && game.gameMode !== keepMode) continue // e.g. keep only Arena
+    games.push(game)
   }
   games.sort((a, b) => (b.date ?? 0) - (a.date ?? 0)) // newest first
 

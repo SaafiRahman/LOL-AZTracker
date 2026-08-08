@@ -23,6 +23,7 @@ function riotDevApi(env) {
           const count = Number(url.searchParams.get('count') || 20)
           const queue = url.searchParams.get('queue') || undefined
           const type = url.searchParams.get('type') || undefined
+          const keepMode = url.searchParams.get('keepMode') || undefined
           const startTime = url.searchParams.get('startTime') || undefined
           const endTime = url.searchParams.get('endTime') || undefined
           const range = url.searchParams.get('range') // 'date' → paginated range fetch
@@ -38,6 +39,8 @@ function riotDevApi(env) {
                     .split(',')
                     .map((s) => Number(s.trim()))
                     .filter(Number.isFinite),
+                  type,
+                  keepMode,
                   startTime,
                   endTime,
                 })
