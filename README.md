@@ -1,124 +1,48 @@
 # LoL A–Z Challenge Tracker
 
-A tracker for the **League of Legends A–Z challenge** — play every champion, one at a
-time, in alphabetical order. Check each champion off as you go and record how the game went.
+**Live at [lolazchallenge.xyz](https://lolazchallenge.xyz)**
+
+A free web app for the League of Legends A–Z challenge, where you play every champion in the game one at a time, in alphabetical order. It keeps track of where you are, remembers how each game went, and can pull your matches straight from Riot so you never have to log anything by hand.
+
+## What it does
+
+Start at Aatrox, end at Zyra, and check off every champion in between. For each one you get a full game log, win and loss records, KDA, notes, a role, and a rating. Your progress bar, win count, and "up next" pointer all update as you go. Sign in with Google and it syncs across every device you own. Stay signed out and it saves everything right in your browser, no account required.
 
 ## Features
 
-- Full champion roster pulled live from **Riot Data Dragon** (official names + icons),
-  sorted A→Z and cached locally for 24h.
-- Per-champion **game log**: add each game as a Win/Loss (auto-dated, editable), delete
-  games, and see which game the win came on. Win/loss counts and completion are *derived*
-  from the log. Each game carries a `source` (`manual` today, `riot` when auto-import lands).
-- Overall **role** played, **notes**, a **fun rating** (0.5–5 half-stars), and a manual
-  **Done** override per champion. The header shows your **average fun** across rated champs.
-- **Riot auto-import** — enter your Riot ID (`Name#TAG`) + region, pick a queue filter, and
-  pull recent games straight from Riot's Match-V5 API. Each game is matched to a champion in
-  the run's pool and added to its log (tagged "from Riot"); already-imported matches are
-  skipped, so re-importing is safe.
-- **Multiple runs** — keep several A–Z runs (e.g. one per season), switch between them from
-  a dropdown; each has its own name, config, and progress.
-- **Champion-pool filter** — scope a run to specific champion **classes** (Fighter, Tank,
-  Mage, Assassin, Marksman, Support) for a "Marksman-only" or "Support-only" A–Z. Progress
-  and A–Z order follow the filtered pool.
-- Run-level **completion mode** toggle — count a champion done *on a win* (play until you
-  win) or *on any game*. Completion is computed from the toggle, so switching it
-  re-evaluates every champion retroactively.
-- Progress bar, champions-won count, total games, average games-to-win, and an "up next"
-  pointer to the next champion.
-- Filter (all / remaining / in progress / completed / won) and search.
-- **Optional Google sign-in** (Firebase Auth) syncs your run + settings across devices via
-  Firestore, live. Signed out, everything is saved locally in `localStorage` — no login
-  needed. First sign-in seeds the cloud from your local data.
+- **Live champion roster** pulled from Riot's official Data Dragon, always current with the latest patch, sorted A to Z with real names and icons.
+- **One click game import.** Type your Riot ID, pick a queue, and it pulls your recent matches from Riot's Match-V5 API, matches each one to the right champion, and files it away. Already imported games are skipped, so you can re-import as often as you like.
+- **KDA tracking** on every game, both from auto import and by hand, with per champion and overall averages.
+- **Play until you win, or count any game.** A single toggle decides what "done" means for a whole run, and every champion re-evaluates instantly when you flip it.
+- **Multiple runs** so you can keep one per season, or run a themed challenge side by side.
+- **Class filtered runs.** Scope a run to Fighters, Tanks, Mages, Assassins, Marksmen, or Supports for a "Marksman only" A to Z, and the order and progress follow the smaller pool.
+- **A shareable progress card.** Generate a clean image of your run to post anywhere.
+- **Grid or list layout,** filters, search, notes, half star ratings, and a running tally of games played and average games it takes you to win.
+- **Your data, your call.** A built in privacy policy and a self serve "delete my data" button, always available.
 
-## Firebase setup
+## Under the hood
 
-Copy `.env.example` to `.env` and fill in your Firebase web config (Project settings → your
-web app). Enable **Google** sign-in under Authentication, create a **Firestore** database,
-and publish security rules that scope each user to their own doc:
+A few of the more interesting problems this project solved:
 
-```
-rules_version = '2';
-service cloud.firestore {
-  match /databases/{database}/documents {
-    match /users/{userId} {
-      allow read, write: if request.auth != null && request.auth.uid == userId;
-      match /{document=**} {
-        allow read, write: if request.auth != null && request.auth.uid == userId;
-      }
-    }
-  }
-}
-```
+- **Queues that change every season.** Riot's queue IDs drift over time (Arena alone has shipped under several different IDs), so instead of hard coding them the importer classifies games by their stable `gameMode` value. That means Arena, ARAM, and Summoner's Rift keep sorting correctly across seasons without any updates.
+- **Getting your full history, not just the last 20 games.** The by date import pages through Riot's match list and fetches details sequentially to stay inside the API rate limits, then de-duplicates and drops remakes before anything reaches your log.
+- **The API key never touches the browser.** In development the Riot key lives behind a Vite middleware proxy, and in production the exact same logic runs as a Vercel serverless function, so the secret stays server side in both.
+- **Cloud sync that degrades gracefully.** Signed in, everything lives in Firestore and updates live. Signed out, it falls back to local storage with the same interface, and your first sign in seeds the cloud from whatever you already had locally.
+- **A share card with no external images.** The progress card is drawn on an HTML canvas so it can be exported as a PNG without tainting the canvas or waiting on remote assets.
 
-If `.env` is absent the app still runs in local-only mode (`firebaseEnabled` is false).
+## Built with
 
-### Riot API (auto-import)
+React and Vite on the front end, Firebase Authentication and Firestore for accounts and sync, Riot's Data Dragon and Match-V5 APIs for champion and game data, and Vercel for hosting, serverless functions, and analytics. Plain JavaScript throughout.
 
-Add a **server-side** key (no `VITE_` prefix, so it never reaches the browser):
-
-```
-RIOT_API_KEY=RGAPI-...
-```
-
-Get a Development key at [developer.riotgames.com](https://developer.riotgames.com) (it
-expires every 24h). **Restart the dev server** after changing it. In dev, requests go through
-a Vite middleware proxy ([`vite.config.js`](vite.config.js) → [`server/riot.js`](server/riot.js))
-so the key stays off the client. In production the same logic runs as a Vercel serverless
-function ([`api/riot/matches.js`](api/riot/matches.js)) — same `/api/riot/matches` contract,
-so the client is unchanged.
-
-## Deploying (Vercel)
-
-The app + Riot proxy deploy together on Vercel's free tier:
-
-1. Import the GitHub repo at [vercel.com](https://vercel.com/new) (framework auto-detects as
-   Vite; build `npm run build`, output `dist`). `/api/*` files become serverless functions.
-2. Add **Environment Variables** in the Vercel project (all `VITE_FIREBASE_*` from your `.env`,
-   plus `RIOT_API_KEY`). The `VITE_` ones are baked into the client build; `RIOT_API_KEY`
-   stays server-side in the function.
-3. After the first deploy, add the Vercel domain (e.g. `your-app.vercel.app`) to
-   **Firebase Console → Authentication → Settings → Authorized domains** so Google sign-in works.
-
-`vercel.json` sets the import function's `maxDuration` to 60s (the paginated by-date import
-fetches match details sequentially to respect Riot's rate limit). For a public site, apply for
-a non-expiring Riot **Personal API Key** so import doesn't break every 24h.
-
-## Getting started
+## Run it locally
 
 ```bash
 npm install
 npm run dev
 ```
 
-Then open http://localhost:5173.
-
-Build for production with `npm run build` (output in `dist/`).
-
-## Project structure
-
-```
-src/
-  api/dataDragon.js      # Riot Data Dragon client (champion list + icons)
-  storage/storage.js     # localStorage persistence + entry migration
-  firebase.js           # Firebase init (guarded; no-op if unconfigured)
-  auth.js               # useAuth hook (Google sign-in/out)
-  useStore.js           # run + settings persistence: Firestore when signed in, else local
-  run.js                # pure log/completion helpers
-  util.js               # uid + local date
-  components/            # ProgressHeader, ChampionCard
-  constants.js          # roles + filter definitions
-  App.jsx               # app state + wiring
-```
-
-## Adding cloud sync later
-
-Persistence is deliberately isolated in [`src/storage/storage.js`](src/storage/storage.js).
-All the app knows about are `loadRun()`, `saveRun(run)`, and `clearRun()`. To move from
-local-only to Firebase (Auth + Firestore) for cross-device, multi-user runs, reimplement
-those functions against Firestore — the components don't need to change.
+Then open http://localhost:5173. You will need a Firebase web config and a Riot API key in a `.env` file (see `.env.example`) for sign in and game import to work, though the tracker itself runs fine without either.
 
 ## Attribution
 
-Champion data and images © Riot Games, retrieved via Data Dragon. This project isn't
-endorsed by or affiliated with Riot Games.
+Champion data and images © Riot Games, retrieved via Data Dragon. This project is not endorsed by or affiliated with Riot Games.
