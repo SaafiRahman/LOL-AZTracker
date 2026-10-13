@@ -28,21 +28,27 @@ export const QUEUE_FILTERS = [
   { key: 'arena', label: 'Arena', queues: [], dateType: 'normal', dateKeepMode: 'CHERRY', fetchParams: { type: 'normal' }, keep: (g) => g.gameMode === 'CHERRY' },
 ]
 
+// Messages are written for players. Key and server problems are on our side,
+// so players get a reassuring "try later"; the developer detail is only shown
+// in local development.
+const DEV = import.meta.env.DEV
+const UNAVAILABLE = 'Importing from Riot is unavailable right now. Your run is safe; try again later or log games by hand.'
+
 function messageForStatus(status, fallback) {
   switch (status) {
     case 400:
-      return 'Check your Riot ID and region.'
+      return 'Riot didn’t accept that Riot ID. Check the name, tag, and region.'
     case 401:
     case 403:
-      return 'Riot rejected the API key — it is likely expired (dev keys last only 24h) or invalid. Regenerate it at developer.riotgames.com, update RIOT_API_KEY in .env, and restart the dev server.'
+      return DEV
+        ? 'Riot rejected the API key: it has likely expired (dev keys last 24h). Regenerate it at developer.riotgames.com, update RIOT_API_KEY in .env, and restart the dev server.'
+        : UNAVAILABLE
     case 404:
-      return 'Riot account not found — double-check the name, tag, and region.'
+      return 'No Riot account found with that ID. Double-check the name, tag, and region.'
     case 429:
-      return 'Riot rate limit hit — wait a minute and try again.'
-    case 500:
-      return fallback || 'Server error talking to Riot.'
+      return 'Riot is getting a lot of requests right now. Wait a minute and try again.'
     default:
-      return fallback || `Riot API error (${status}).`
+      return DEV ? fallback || `Riot API error (${status}).` : UNAVAILABLE
   }
 }
 
@@ -55,7 +61,11 @@ async function callProxy(search) {
   try {
     res = await fetch(`/api/riot/matches?${search}`)
   } catch {
-    throw new Error('Could not reach the import server. Is the dev server running?')
+    throw new Error(
+      DEV
+        ? 'Could not reach the import server. Is the dev server running?'
+        : 'Couldn’t reach the import server. Check your connection and try again.',
+    )
   }
   const data = await res.json().catch(() => ({}))
   if (!res.ok) {

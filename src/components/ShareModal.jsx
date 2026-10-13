@@ -2,16 +2,32 @@ import { useEffect, useRef, useState } from 'react'
 import { renderShareCard, canvasToBlob } from '../shareCard.js'
 
 // Renders the progress share card and offers download / copy.
-export default function ShareModal({ runName, stats, onClose }) {
+export default function ShareModal({ runName, stats, letters, nextName, onClose }) {
   const canvasRef = useRef(null)
+  const firstBtnRef = useRef(null)
   const [copied, setCopied] = useState(false)
   const [copyError, setCopyError] = useState(false)
 
   useEffect(() => {
     if (canvasRef.current) {
-      renderShareCard(canvasRef.current, { runName, stats }).catch(() => {})
+      renderShareCard(canvasRef.current, { runName, stats, letters, nextName }).catch(() => {})
     }
-  }, [runName, stats])
+  }, [runName, stats, letters, nextName])
+
+  // Focus the first action on open, close on Escape, and return focus to
+  // whatever opened the dialog.
+  useEffect(() => {
+    const opener = document.activeElement
+    firstBtnRef.current?.focus()
+    const onKey = (e) => {
+      if (e.key === 'Escape') onClose()
+    }
+    window.addEventListener('keydown', onKey)
+    return () => {
+      window.removeEventListener('keydown', onKey)
+      opener?.focus?.()
+    }
+  }, [onClose])
 
   async function handleDownload() {
     const blob = await canvasToBlob(canvasRef.current)
@@ -43,13 +59,13 @@ export default function ShareModal({ runName, stats, onClose }) {
           <canvas ref={canvasRef} className="share-canvas" />
         </div>
         <div className="share-actions">
-          <button type="button" className="share-btn primary" onClick={handleDownload}>
+          <button type="button" className="btn btn-primary" onClick={handleDownload} ref={firstBtnRef}>
             Download image
           </button>
-          <button type="button" className="share-btn" onClick={handleCopy}>
-            {copied ? 'Copied ✓' : 'Copy image'}
+          <button type="button" className="btn btn-outline" onClick={handleCopy}>
+            {copied ? 'Copied' : 'Copy image'}
           </button>
-          <button type="button" className="share-btn ghost" onClick={onClose}>
+          <button type="button" className="btn btn-ghost" onClick={onClose}>
             Close
           </button>
         </div>

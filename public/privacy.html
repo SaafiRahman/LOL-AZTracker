@@ -75,7 +75,7 @@
     <div class="wrap">
       <a class="back" href="/">← Back to the tracker</a>
       <h1>Privacy Policy</h1>
-      <p class="updated">Last updated: August 2026</p>
+      <p class="updated">Last updated: October 2026</p>
 
       <p>
         The LoL A–Z Challenge Tracker (“the app”) helps you track your progress in the League of
@@ -98,6 +98,13 @@
           <strong>Riot ID &amp; imported matches</strong> — if you use the import feature, the Riot
           ID you enter (game name, tag, region) and the match data returned by Riot for those games
           (champion played, win/loss, date). This is stored with your run.
+        </li>
+        <li id="feedback">
+          <strong>Feedback and bug reports</strong> — if you use the “Report a bug or send feedback”
+          form, we receive your message, the email address you enter (optional), and basic technical
+          context: your browser and operating system, screen and window size, the page you were on,
+          and whether you were signed in. It is not linked to your account or your runs, and it is
+          used only to fix problems, improve the app, and reply to you if you left an email.
         </li>
         <li>
           <strong>Local storage</strong> — when you are not signed in, your data is kept only in your
@@ -128,17 +135,18 @@
       <h2>Data storage and security</h2>
       <p>
         Signed-in data is stored in Firestore and readable/writable only by your own authenticated
-        account (enforced by security rules). No system is perfectly secure, but access is scoped to
-        you.
+        account (enforced by security rules). Feedback messages are also stored in Firestore; they can
+        be submitted by anyone but read only by the developer. No system is perfectly secure, but
+        access is scoped as described.
       </p>
 
       <h2>Your choices and data deletion</h2>
       <ul>
-        <li>You can clear a single run’s progress at any time with “Reset run.”</li>
+        <li>You can clear a single run’s progress at any time with “Reset progress” in Run settings.</li>
         <li>You can sign out to stop cloud sync and use the app locally only.</li>
         <li>
-          <strong>Delete my data</strong> — when signed in, the “Delete my data” button (next to
-          Sign out) <strong>permanently and immediately erases all of your runs and stored data from
+          <strong>Delete my data</strong> — when signed in, the “Delete all my data” button in Run
+          settings <strong>permanently and immediately erases all of your runs and stored data from
           the cloud</strong>, and signs you out. This is fully self-service; no request or waiting
           period is needed.
         </li>
@@ -169,9 +177,15 @@
 
       <h2>Managing your data</h2>
       <p>
-        Because you can view and erase all of your data yourself within the app — “Reset run” for a
-        single run, and “Delete my data” to remove everything — there is no separate data-request
-        process. Deletion takes effect immediately.
+        Because you can view and erase all of your tracker data yourself within the app — “Reset
+        progress” for a single run, and “Delete all my data” to remove everything — there is no
+        separate data-request process for it. Deletion takes effect immediately.
+      </p>
+
+      <p>
+        Feedback messages are not tied to your account, so “Delete all my data” does not remove them.
+        To have a message you sent deleted, send another message through the same form asking for it,
+        including the email address you used or enough of the original message to identify it.
       </p>
 
       <p style="margin-top: 40px; color: var(--dim); font-size: 0.82rem">
