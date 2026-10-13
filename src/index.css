@@ -1267,9 +1267,80 @@ p.spotlight-record {
   font-size: 0.9rem;
 }
 
+/* ---------- Contact ---------- */
+.contact {
+  margin-top: 72px;
+  padding-top: 32px;
+  border-top: 1px solid var(--gold-line);
+  max-width: 640px;
+}
+.contact h2 {
+  margin: 0 0 8px;
+  font: 600 1.35rem var(--font-display);
+  color: var(--gold-bright);
+}
+.contact-lead {
+  margin: 0 0 24px;
+  color: var(--text-dim);
+}
+.contact-form {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 18px;
+}
+.contact-form .field {
+  width: 100%;
+}
+.contact-form .segmented {
+  align-self: flex-start;
+}
+.contact-message {
+  resize: vertical;
+  min-height: 132px;
+  line-height: 1.5;
+}
+.contact-count {
+  align-self: flex-end;
+  font-size: 0.87rem;
+  color: var(--text-faint);
+}
+.contact-note {
+  margin: 0;
+  font-size: 0.87rem;
+  color: var(--text-dim);
+}
+.contact-trap {
+  position: absolute;
+  left: -10000px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.contact-sent {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-top: 16px;
+  border-top: 1px solid var(--gold-dim);
+  animation: rise 260ms var(--ease-out);
+}
+.contact-sent p {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--text);
+}
+.contact-sent .icon {
+  color: var(--win);
+}
+
 /* ---------- About + footer ---------- */
 .about {
-  margin-top: 72px;
+  margin-top: 56px;
   padding-top: 32px;
   border-top: 1px solid var(--gold-line);
   max-width: 70ch;

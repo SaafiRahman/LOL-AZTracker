@@ -15,6 +15,7 @@ import TrophyShelf from './components/TrophyShelf.jsx'
 import Roster from './components/Roster.jsx'
 import ShareModal from './components/ShareModal.jsx'
 import Icon from './components/Icon.jsx'
+import Contact from './components/Contact.jsx'
 
 const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
 
@@ -536,6 +537,8 @@ export default function App() {
         </div>
       )}
 
+      <Contact key={auth.user?.uid ?? 'signed-out'} auth={auth} />
+
       <section className="about">
         <h2>About the League of Legends A–Z Challenge</h2>
         <p>
@@ -554,6 +557,12 @@ export default function App() {
       </section>
 
       <footer className="app-footer">
+        <a href="#contact" className="footer-link">
+          Contact
+        </a>
+        <span className="footer-sep" aria-hidden="true">
+          ·
+        </span>
         <a href="/privacy.html" className="footer-link">
           Privacy Policy
         </a>
