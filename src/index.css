@@ -1230,6 +1230,65 @@ p.spotlight-record {
   animation: toast-in 320ms var(--ease-out);
 }
 
+/* ---------- What's new ---------- */
+.whats-new {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  z-index: 140;
+  width: min(380px, calc(100vw - 32px));
+  padding: 20px 20px 18px;
+  border: 1px solid var(--gold-dim);
+  border-top: 2px solid var(--gold);
+  background: var(--hex-raise);
+  box-shadow: 0 16px 40px -12px rgba(0, 0, 0, 0.8);
+  animation: whats-new-in 420ms var(--ease-out);
+}
+.whats-new h2 {
+  margin: 0 32px 10px 0;
+  font: 600 1.15rem var(--font-display);
+  color: var(--gold-bright);
+}
+.whats-new p {
+  margin: 0 0 10px;
+  color: var(--text-dim);
+  font-size: 0.93rem;
+}
+.whats-new strong {
+  color: var(--text);
+  font-weight: 600;
+}
+.whats-new-close {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  display: inline-grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid transparent;
+  background: none;
+  color: var(--text-dim);
+  cursor: pointer;
+}
+.whats-new-close:hover {
+  color: var(--gold-bright);
+  border-color: var(--gold-line);
+}
+.whats-new-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+@keyframes whats-new-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+
 /* ---------- Share modal ---------- */
 .share-overlay {
   position: fixed;
@@ -1409,8 +1468,9 @@ p.spotlight-record {
   .settings-inline {
     animation: fade 180ms linear;
   }
-  .toast {
-    animation: none;
+  .toast,
+  .whats-new {
+    animation: fade 180ms linear;
   }
   .shelf-icon:hover {
     transform: none;
@@ -1455,6 +1515,10 @@ p.spotlight-record {
     width: 42px;
     height: 42px;
   }
+  .whats-new-close {
+    width: 44px;
+    height: 44px;
+  }
 }
 
 /* ---------- Responsive ---------- */
@@ -1481,6 +1545,11 @@ p.spotlight-record {
   }
 }
 @media (max-width: 720px) {
+  .whats-new {
+    right: 16px;
+    bottom: 16px;
+    width: calc(100vw - 32px);
+  }
   .topbar {
     gap: 6px;
     min-height: 56px;
@@ -1580,5 +1649,9 @@ p.spotlight-record {
   .shelf-icon img {
     width: 42px;
     height: 42px;
+  }
+  .whats-new-close {
+    width: 44px;
+    height: 44px;
   }
 }

@@ -16,8 +16,22 @@ import Roster from './components/Roster.jsx'
 import ShareModal from './components/ShareModal.jsx'
 import Icon from './components/Icon.jsx'
 import Contact from './components/Contact.jsx'
+import WhatsNew from './components/WhatsNew.jsx'
 
 const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+
+// "What's new" announcement for returning players; bump to announce again.
+const WHATS_NEW_KEY = 'az-tracker:whats-new:2026-10-redesign'
+// Set by the pre-redesign Welcome intro; marks someone who used the old site.
+const OLD_INTRO_KEY = 'az-tracker:intro-dismissed'
+
+function readFlag(key) {
+  try {
+    return localStorage.getItem(key)
+  } catch {
+    return null
+  }
+}
 
 const poolFor = (champions, classFilter) =>
   classFilter?.length ? champions.filter((c) => c.tags?.some((t) => classFilter.includes(t))) : champions
@@ -39,6 +53,8 @@ export default function App() {
   const [expanded, setExpanded] = useState(() => new Set())
   const [importState, setImportState] = useState({ busy: false, busyMessage: '', error: null, recap: null })
   const [toast, setToast] = useState(null) // { message, undo? }
+  const [whatsNewSeen, setWhatsNewSeen] = useState(() => readFlag(WHATS_NEW_KEY) === '1')
+  const [whatsNewReady, setWhatsNewReady] = useState(false)
   const toastTimer = useRef(null)
 
   // Load the champion roster once on mount.
@@ -394,6 +410,29 @@ export default function App() {
 
   const closeShare = useCallback(() => setShareOpen(false), [])
 
+  const dismissWhatsNew = useCallback(() => {
+    setWhatsNewSeen(true)
+    try {
+      localStorage.setItem(WHATS_NEW_KEY, '1')
+    } catch {
+      // ignore private-mode failures
+    }
+  }, [])
+
+  // Let the spotlight land before the announcement slides in.
+  useEffect(() => {
+    if (loadState !== 'ready') return
+    const t = setTimeout(() => setWhatsNewReady(true), 1200)
+    return () => clearTimeout(t)
+  }, [loadState])
+
+  // Only people who used the site before the redesign get the announcement.
+  const isReturning =
+    readFlag(OLD_INTRO_KEY) === '1' ||
+    !!store.riotAccount ||
+    runList.length > 1 ||
+    stats.totalGames > 0
+
   if (loadState === 'loading' || !auth.ready || !storeReady || !activeRun) {
     return (
       <div className="app">
@@ -508,6 +547,8 @@ export default function App() {
       </main>
 
       {shareOpen && <ShareModal runName={activeRun.name} stats={stats} letters={letters} nextName={nextChampion?.name} onClose={closeShare} />}
+
+      {whatsNewReady && !whatsNewSeen && isReturning && !shareOpen && <WhatsNew onDismiss={dismissWhatsNew} />}
 
       {toast && (
         <div
