@@ -1,20 +1,25 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { fetchChampions } from './api/dataDragon.js'
 import { emptyEntry } from './storage/storage.js'
-import { FILTERS } from './constants.js'
 import { isComplete, isWon, gamesPlayed, gamesToWin } from './run.js'
 import { uid, todayISO, toISODate } from './util.js'
 import { importMatches, importMatchesByDate } from './api/riot.js'
+import { lastImportDate, quickImportOptions } from './importPlan.js'
 import { useAuth } from './auth.js'
 import { useStore } from './useStore.js'
-import ProgressHeader from './components/ProgressHeader.jsx'
-import ChampionCard from './components/ChampionCard.jsx'
-import RunBar from './components/RunBar.jsx'
-import RiotImport from './components/RiotImport.jsx'
-import Welcome from './components/Welcome.jsx'
+import TopBar from './components/TopBar.jsx'
+import RunSettings from './components/RunSettings.jsx'
+import Spotlight from './components/Spotlight.jsx'
+import ImportOptions from './components/ImportOptions.jsx'
+import TrophyShelf from './components/TrophyShelf.jsx'
+import Roster from './components/Roster.jsx'
 import ShareModal from './components/ShareModal.jsx'
+import Icon from './components/Icon.jsx'
 
-const INTRO_KEY = 'az-tracker:intro-dismissed'
+const LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
+
+const poolFor = (champions, classFilter) =>
+  classFilter?.length ? champions.filter((c) => c.tags?.some((t) => classFilter.includes(t))) : champions
 
 export default function App() {
   const [champions, setChampions] = useState([])
@@ -28,34 +33,12 @@ export default function App() {
   const [filter, setFilter] = useState('all')
   const [search, setSearch] = useState('')
   const [shareOpen, setShareOpen] = useState(false)
-  const [layout, setLayout] = useState(() =>
-    localStorage.getItem('az-tracker:layout') === 'list' ? 'list' : 'grid',
-  )
-
-  function changeLayout(next) {
-    setLayout(next)
-    try {
-      localStorage.setItem('az-tracker:layout', next)
-    } catch {
-      // ignore private-mode failures
-    }
-  }
-  const [showIntro, setShowIntro] = useState(() => {
-    try {
-      return localStorage.getItem(INTRO_KEY) !== '1'
-    } catch {
-      return true
-    }
-  })
-
-  function dismissIntro() {
-    setShowIntro(false)
-    try {
-      localStorage.setItem(INTRO_KEY, '1')
-    } catch {
-      // ignore
-    }
-  }
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  const [optionsOpen, setOptionsOpen] = useState(false)
+  const [expanded, setExpanded] = useState(() => new Set())
+  const [importState, setImportState] = useState({ busy: false, busyMessage: '', error: null, recap: null })
+  const [toast, setToast] = useState(null) // { message, undo? }
+  const toastTimer = useRef(null)
 
   // Load the champion roster once on mount.
   useEffect(() => {
@@ -78,15 +61,25 @@ export default function App() {
 
   // The champion pool for the active run: all champions, or only those whose
   // class matches the run's classFilter.
-  const pool = useMemo(() => {
-    const cf = activeRun?.classFilter ?? []
-    if (!cf.length) return champions
-    return champions.filter((c) => c.tags?.some((t) => cf.includes(t)))
-  }, [champions, activeRun?.classFilter])
+  const pool = useMemo(() => poolFor(champions, activeRun?.classFilter), [champions, activeRun?.classFilter])
+  const poolIndex = useMemo(() => new Map(pool.map((c, i) => [c.id, i])), [pool])
 
   const runChampions = activeRun?.champions ?? {}
   const mode = activeRun?.completionMode ?? 'win'
   const entryFor = (id) => runChampions[id] ?? emptyEntry()
+
+  // The toast hides after 7s, but holds while it's hovered or focused so Undo
+  // is never snatched away mid-reach.
+  function startToastTimer() {
+    clearTimeout(toastTimer.current)
+    toastTimer.current = setTimeout(() => setToast(null), 7000)
+  }
+  const holdToast = () => clearTimeout(toastTimer.current)
+
+  function showToast(message, undo) {
+    setToast({ message, undo })
+    startToastTimer()
+  }
 
   function updateEntry(id, patch) {
     store.mutateChampions((prev) => {
@@ -104,10 +97,23 @@ export default function App() {
   }
 
   function removeGame(id, gameId) {
+    const current = runChampions[id] ?? emptyEntry()
+    const index = current.games.findIndex((g) => g.id === gameId)
+    if (index === -1) return
+    const removed = current.games[index]
     store.mutateChampions((prev) => {
-      const current = prev[id] ?? emptyEntry()
-      return { ...prev, [id]: { ...current, games: current.games.filter((g) => g.id !== gameId) } }
+      const e = prev[id] ?? emptyEntry()
+      return { ...prev, [id]: { ...e, games: e.games.filter((g) => g.id !== gameId) } }
     })
+    const name = champions.find((c) => c.id === id)?.name ?? 'champion'
+    showToast(`Removed a ${removed.result} from ${name}.`, () =>
+      store.mutateChampions((prev) => {
+        const e = prev[id] ?? emptyEntry()
+        const games = [...e.games]
+        games.splice(Math.min(index, games.length), 0, removed)
+        return { ...prev, [id]: { ...e, games } }
+      }),
+    )
   }
 
   function updateGame(id, gameId, patch) {
@@ -118,122 +124,155 @@ export default function App() {
     })
   }
 
+  // --- run management (naming and confirmation happen in RunSettings) ---
   function handleReset() {
-    if (!window.confirm(`Reset "${activeRun.name}"? This clears its progress.`)) return
     store.resetActiveRun()
+    showToast(`Cleared every game in “${activeRun.name}”.`)
   }
 
+  // Throws on failure so RunSettings can show the error in place.
   async function handleDeleteData() {
-    if (
-      !window.confirm(
-        'Permanently delete ALL your data — every run — from the cloud and this device?\n\nThis cannot be undone. You will be signed out.',
-      )
-    )
-      return
-    try {
-      await store.deleteAccountData()
-      await auth.logout()
-    } catch (e) {
-      window.alert(`Could not delete your data: ${e.message}`)
-    }
+    await store.deleteAccountData()
+    await auth.logout()
+    setSettingsOpen(false)
   }
 
-  // --- run management ---
-  function handleNewRun() {
-    const name = window.prompt('Name this run:', `Run ${runList.length + 1}`)
-    if (name == null) return
-    store.addRun(name.trim() || `Run ${runList.length + 1}`)
+  function handleNewRun(name) {
+    store.addRun(name)
+    showToast(`Started “${name}”.`)
   }
-  function handleRenameRun() {
-    const name = window.prompt('Rename run:', activeRun.name)
-    if (name == null) return
-    store.renameRun(activeRun.id, name.trim() || activeRun.name)
+  function handleRenameRun(name) {
+    store.renameRun(activeRun.id, name)
   }
   function handleDeleteRun() {
-    if (!window.confirm(`Delete run "${activeRun.name}"? This removes its progress.`)) return
+    const name = activeRun.name
     store.deleteRun(activeRun.id)
+    showToast(`Deleted “${name}”.`)
   }
 
-  // Fetch recent games from Riot and append them (as source:'riot') to the
-  // matching champions in this run's pool, skipping already-imported matches.
-  async function handleRiotImport(opts) {
-    const { mode, gameName, tagLine, region } = opts
-    const result =
-      mode === 'date'
-        ? await importMatchesByDate({
-            gameName,
-            tagLine,
-            region,
-            queues: opts.queues,
-            type: opts.type,
-            keepMode: opts.keepMode,
-            startTime: opts.startTime,
-            endTime: opts.endTime,
-          })
-        : await importMatches({
-            gameName,
-            tagLine,
-            region,
-            count: opts.count,
-            fetchParams: opts.fetchParams,
-            keep: opts.keep,
-          })
-    const matches = result.games
-    store.setRiotAccount({ gameName, tagLine, region })
+  function applySettings({ completionMode, classFilter }) {
+    if (completionMode !== activeRun.completionMode) store.setCompletionMode(completionMode)
+    if (classFilter.join() !== activeRun.classFilter.join()) store.setClassFilter(classFilter)
+    setSettingsOpen(false)
+    showToast('Run settings applied. Progress recounted.')
+  }
 
-    // Match-V5 championName matches Data Dragon ids (compared case-insensitively).
-    const byId = new Map(pool.map((c) => [c.id.toLowerCase(), c]))
+  // How many champions would be done under a given rule set (for the settings preview).
+  const previewCounts = (m, classFilter) => {
+    const p = poolFor(champions, classFilter)
+    let completed = 0
+    for (const c of p) if (isComplete(runChampions[c.id] ?? emptyEntry(), m)) completed += 1
+    return { total: p.length, completed }
+  }
 
-    // Existing imported matchIds across the run, for de-duplication.
-    const existing = new Set()
-    for (const e of Object.values(runChampions)) {
-      for (const g of e.games) if (g.matchId) existing.add(g.matchId)
-    }
-
-    // Oldest-first so the appended log stays chronological (like manual entries).
-    const ordered = [...matches].sort((a, b) => (a.date ?? 0) - (b.date ?? 0))
-
-    let added = 0
-    let skipped = 0
-    let unmatched = 0
-    store.mutateChampions((prev) => {
-      const next = { ...prev }
-      for (const m of ordered) {
-        if (existing.has(m.matchId)) {
-          skipped += 1
-          continue
-        }
-        const champ = byId.get((m.championName || '').toLowerCase())
-        if (!champ) {
-          unmatched += 1
-          continue
-        }
-        const current = next[champ.id] ?? emptyEntry()
-        const game = {
-          id: uid(),
-          result: m.win ? 'win' : 'loss',
-          date: m.date ? toISODate(m.date) : todayISO(),
-          source: 'riot',
-          matchId: m.matchId,
-          kills: m.kills,
-          deaths: m.deaths,
-          assists: m.assists,
-        }
-        next[champ.id] = { ...current, games: [...current.games, game] }
-        existing.add(m.matchId)
-        added += 1
-      }
-      return next
+  // Fetch games from Riot and append them (as source:'riot') to the matching
+  // champions in this run's pool, skipping already-imported matches. Leaves a
+  // per-champion recap in the spotlight.
+  async function runImport(opts) {
+    const { mode: range, gameName, tagLine, region, queueKey } = opts
+    setImportState({
+      busy: true,
+      busyMessage: range === 'date' ? 'Paging through your match history on Riot…' : 'Fetching your recent matches from Riot…',
+      error: null,
+      recap: null,
     })
+    try {
+      const result =
+        range === 'date'
+          ? await importMatchesByDate({
+              gameName,
+              tagLine,
+              region,
+              queues: opts.queues,
+              type: opts.type,
+              keepMode: opts.keepMode,
+              startTime: opts.startTime,
+              endTime: opts.endTime,
+            })
+          : await importMatches({ gameName, tagLine, region, count: opts.count, fetchParams: opts.fetchParams, keep: opts.keep })
+      // Remember the Riot ID, region and queue so "Import new games" repeats them.
+      store.setRiotAccount({ gameName, tagLine, region, queueKey })
 
-    const parts = [`Imported ${added} game${added === 1 ? '' : 's'}`]
-    if (skipped) parts.push(`skipped ${skipped} already logged`)
-    if (unmatched) parts.push(`${unmatched} not in this run’s pool`)
-    let summary = `${parts.join(' · ')}.`
-    if (result.truncated) {
-      summary += ` Found ${result.totalFound} games in range — a dev key caps one import at 80, so narrow the date window to reach older ones.`
+      // Match-V5 championName matches Data Dragon ids (compared case-insensitively).
+      const byId = new Map(pool.map((c) => [c.id.toLowerCase(), c]))
+      const existing = new Set()
+      for (const e of Object.values(runChampions)) for (const g of e.games) if (g.matchId) existing.add(g.matchId)
+      // Oldest-first so the appended log stays chronological (like manual entries).
+      const ordered = [...result.games].sort((a, b) => (a.date ?? 0) - (b.date ?? 0))
+
+      let added = 0
+      let skipped = 0
+      let unmatched = 0
+      const touched = new Map() // champ id → { wins, losses }
+      let recapChamps = []
+      store.mutateChampions((prev) => {
+        const next = { ...prev }
+        for (const m of ordered) {
+          if (existing.has(m.matchId)) {
+            skipped += 1
+            continue
+          }
+          const champ = byId.get((m.championName || '').toLowerCase())
+          if (!champ) {
+            unmatched += 1
+            continue
+          }
+          const current = next[champ.id] ?? emptyEntry()
+          const game = {
+            id: uid(),
+            result: m.win ? 'win' : 'loss',
+            date: m.date ? toISODate(m.date) : todayISO(),
+            source: 'riot',
+            matchId: m.matchId,
+            kills: m.kills,
+            deaths: m.deaths,
+            assists: m.assists,
+          }
+          next[champ.id] = { ...current, games: [...current.games, game] }
+          existing.add(m.matchId)
+          added += 1
+          const t = touched.get(champ.id) ?? { wins: 0, losses: 0 }
+          t[m.win ? 'wins' : 'losses'] += 1
+          touched.set(champ.id, t)
+        }
+        recapChamps = pool
+          .filter((c) => touched.has(c.id))
+          .map((c) => {
+            const before = prev[c.id] ?? emptyEntry()
+            const after = next[c.id]
+            return {
+              id: c.id,
+              name: c.name,
+              iconUrl: c.iconUrl,
+              ...touched.get(c.id),
+              completedNow: !isComplete(before, mode) && isComplete(after, mode),
+              gamesToWin: gamesToWin(after),
+            }
+          })
+        return next
+      })
+
+      setImportState({
+        busy: false,
+        busyMessage: '',
+        error: null,
+        recap: { added, skipped, unmatched, truncated: result.truncated, totalFound: result.totalFound, champions: recapChamps },
+      })
+      setOptionsOpen(false)
+    } catch (e) {
+      setImportState({ busy: false, busyMessage: '', error: e.message, recap: null })
     }
-    return summary
+  }
+
+  const sinceDate = useMemo(() => lastImportDate(runChampions), [runChampions])
+
+  function quickImport() {
+    runImport(quickImportOptions({ account: store.riotAccount, sinceDate }))
+  }
+
+  // First import from the spotlight form: the last 20 matches in the chosen queue.
+  function firstImport(account) {
+    runImport(quickImportOptions({ account, sinceDate: null }))
   }
 
   const stats = useMemo(() => {
@@ -286,6 +325,25 @@ export default function App() {
     [pool, runChampions, mode],
   )
 
+  const completedChampions = useMemo(
+    () => pool.filter((c) => isComplete(runChampions[c.id] ?? emptyEntry(), mode)),
+    [pool, runChampions, mode],
+  )
+
+  const letters = useMemo(
+    () =>
+      LETTERS.map((letter) => {
+        const inLetter = pool.filter((c) => c.name[0].toUpperCase() === letter)
+        return {
+          letter,
+          total: inLetter.length,
+          done: inLetter.filter((c) => isComplete(runChampions[c.id] ?? emptyEntry(), mode)).length,
+          current: nextChampion ? nextChampion.name[0].toUpperCase() === letter : false,
+        }
+      }),
+    [pool, runChampions, mode, nextChampion],
+  )
+
   const visibleChampions = useMemo(() => {
     const q = search.trim().toLowerCase()
     return pool.filter((c) => {
@@ -307,10 +365,40 @@ export default function App() {
     })
   }, [pool, runChampions, mode, filter, search])
 
+  const toggleRow = (id) =>
+    setExpanded((prev) => {
+      const next = new Set(prev)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
+      return next
+    })
+
+  // Open a champion's row in the roster and bring it into view.
+  const [jumpTarget, setJumpTarget] = useState(null)
+  function jumpTo(id) {
+    setFilter('all')
+    setSearch('')
+    setExpanded((prev) => new Set(prev).add(id))
+    setJumpTarget(id)
+  }
+  useEffect(() => {
+    if (!jumpTarget) return
+    const row = document.getElementById(`row-${jumpTarget}`)
+    if (row) {
+      row.scrollIntoView({ behavior: 'smooth', block: 'center' })
+      row.querySelector('.row-toggle')?.focus({ preventScroll: true })
+    }
+    setJumpTarget(null)
+  }, [jumpTarget])
+
+  const closeShare = useCallback(() => setShareOpen(false), [])
+
   if (loadState === 'loading' || !auth.ready || !storeReady || !activeRun) {
     return (
       <div className="app">
-        <div className="centered-msg">Loading champions from Data Dragon…</div>
+        <div className="centered-msg" role="status">
+          Loading champions from Data Dragon…
+        </div>
       </div>
     )
   }
@@ -318,110 +406,134 @@ export default function App() {
   if (loadState === 'error') {
     return (
       <div className="app">
-        <div className="centered-msg error">
-          <p>Couldn’t load the champion list.</p>
+        <div className="centered-msg error" role="alert">
+          <p>Couldn’t load the champion list from Riot’s Data Dragon.</p>
           <p className="error-detail">{error}</p>
-          <button type="button" onClick={() => window.location.reload()}>
-            Retry
+          <button type="button" className="btn btn-primary" onClick={() => window.location.reload()}>
+            Try again
           </button>
         </div>
       </div>
     )
   }
 
+  const rowActions = (id) => ({
+    onChange: (patch) => updateEntry(id, patch),
+    onAddGame: (result) => addGame(id, result),
+    onRemoveGame: (gameId) => removeGame(id, gameId),
+    onUpdateGame: (gameId, patch) => updateGame(id, gameId, patch),
+  })
+
   return (
     <div className="app">
-      {showIntro && <Welcome onDismiss={dismissIntro} />}
+      <a className="skip-link" href="#roster-heading">
+        Skip to roster
+      </a>
 
-      <RunBar
+      <TopBar
         runs={runList}
         activeRunId={activeRun.id}
-        onSelect={store.selectRun}
-        onNew={handleNewRun}
-        onRename={handleRenameRun}
-        onDelete={handleDeleteRun}
-      />
-
-      <ProgressHeader
-        stats={stats}
-        nextChampion={nextChampion}
-        mode={mode}
-        onModeChange={store.setCompletionMode}
-        classFilter={activeRun.classFilter}
-        onClassFilterChange={store.setClassFilter}
-        onReset={handleReset}
-        onDeleteData={handleDeleteData}
+        onSelectRun={store.selectRun}
+        settingsOpen={settingsOpen}
+        onToggleSettings={() => setSettingsOpen((o) => !o)}
         onShare={() => setShareOpen(true)}
         auth={auth}
         syncing={syncing}
       />
 
-      {shareOpen && (
-        <ShareModal runName={activeRun.name} stats={stats} onClose={() => setShareOpen(false)} />
+      {settingsOpen && (
+        <RunSettings
+          key={activeRun.id}
+          run={activeRun}
+          runCount={runList.length}
+          previewCounts={previewCounts}
+          canDeleteRun={runList.length > 1}
+          auth={auth}
+          onApply={applySettings}
+          onNewRun={handleNewRun}
+          onRenameRun={handleRenameRun}
+          onDeleteRun={handleDeleteRun}
+          onResetRun={handleReset}
+          onDeleteData={handleDeleteData}
+          onClose={() => setSettingsOpen(false)}
+        />
       )}
 
-      <RiotImport account={store.riotAccount} onImport={handleRiotImport} />
+      <main>
+        <Spotlight
+          champion={nextChampion}
+          position={nextChampion ? poolIndex.get(nextChampion.id) + 1 : pool.length}
+          total={pool.length}
+          entry={nextChampion ? entryFor(nextChampion.id) : emptyEntry()}
+          firstChampion={pool[0]}
+          lastChampion={pool[pool.length - 1]}
+          isNewRun={stats.totalGames === 0}
+          letters={letters}
+          account={store.riotAccount}
+          sinceDate={sinceDate}
+          importState={importState}
+          optionsOpen={optionsOpen}
+          onQuickImport={quickImport}
+          onFirstImport={firstImport}
+          onToggleOptions={() => setOptionsOpen((o) => !o)}
+          onDismissRecap={() => setImportState((s) => ({ ...s, recap: null }))}
+          onAddGame={(result) => nextChampion && addGame(nextChampion.id, result)}
+          onJumpTo={jumpTo}
+        >
+          {optionsOpen && <ImportOptions account={store.riotAccount} busy={importState.busy} onImport={runImport} />}
+        </Spotlight>
 
-      <div className="toolbar">
-        <div className="filter-tabs">
-          {FILTERS.map((f) => (
-            <button
-              key={f.key}
-              type="button"
-              className={`tab${filter === f.key ? ' is-active' : ''}`}
-              onClick={() => setFilter(f.key)}
-            >
-              {f.label}
-            </button>
-          ))}
-        </div>
-        <div className="toolbar-right">
-          <div className="view-toggle mode-toggle" role="group" aria-label="Layout">
-            <button
-              type="button"
-              className={`mode-btn${layout === 'grid' ? ' is-active' : ''}`}
-              onClick={() => changeLayout('grid')}
-              title="Grid (multiple columns)"
-            >
-              ▦ Grid
-            </button>
-            <button
-              type="button"
-              className={`mode-btn${layout === 'list' ? ' is-active' : ''}`}
-              onClick={() => changeLayout('list')}
-              title="Single column"
-            >
-              ☰ List
-            </button>
-          </div>
-          <input
-            type="search"
-            className="search"
-            placeholder="Search champion…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </div>
-      </div>
+        <TrophyShelf
+          champions={completedChampions}
+          entryFor={entryFor}
+          avgGamesToWin={stats.avgGamesToWin}
+          onJumpTo={jumpTo}
+        />
 
-      {visibleChampions.length === 0 ? (
-        <div className="centered-msg">No champions match this view.</div>
-      ) : (
-        <ul className={`champ-list${layout === 'list' ? ' list-view' : ''}`}>
-          {visibleChampions.map((champ) => (
-            <ChampionCard
-              key={champ.id}
-              champion={champ}
-              index={pool.indexOf(champ)}
-              entry={entryFor(champ.id)}
-              mode={mode}
-              onChange={(patch) => updateEntry(champ.id, patch)}
-              onAddGame={(result) => addGame(champ.id, result)}
-              onRemoveGame={(gameId) => removeGame(champ.id, gameId)}
-              onUpdateGame={(gameId, patch) => updateGame(champ.id, gameId, patch)}
-            />
-          ))}
-        </ul>
+        <Roster
+          champions={visibleChampions}
+          poolIndex={poolIndex}
+          entryFor={entryFor}
+          mode={mode}
+          currentId={nextChampion?.id}
+          expanded={expanded}
+          onToggle={toggleRow}
+          filter={filter}
+          onFilter={setFilter}
+          search={search}
+          onSearch={setSearch}
+          rowActions={rowActions}
+        />
+      </main>
+
+      {shareOpen && <ShareModal runName={activeRun.name} stats={stats} letters={letters} nextName={nextChampion?.name} onClose={closeShare} />}
+
+      {toast && (
+        <div
+          className="toast"
+          role="status"
+          onMouseEnter={holdToast}
+          onMouseLeave={startToastTimer}
+          onFocus={holdToast}
+          onBlur={startToastTimer}
+        >
+          <span>{toast.message}</span>
+          {toast.undo && (
+            <button
+              type="button"
+              className="btn btn-ghost btn-sm"
+              onClick={() => {
+                toast.undo()
+                setToast(null)
+              }}
+            >
+              <Icon name="undo" size={16} /> Undo
+            </button>
+          )}
+          <button type="button" className="toast-close" aria-label="Dismiss" onClick={() => setToast(null)}>
+            <Icon name="close" size={16} />
+          </button>
+        </div>
       )}
 
       <section className="about">
@@ -442,8 +554,12 @@ export default function App() {
       </section>
 
       <footer className="app-footer">
-        <a href="/privacy.html" className="footer-link">Privacy Policy</a>
-        <span className="footer-sep">·</span>
+        <a href="/privacy.html" className="footer-link">
+          Privacy Policy
+        </a>
+        <span className="footer-sep" aria-hidden="true">
+          ·
+        </span>
         Champion data &amp; images © Riot Games, via Data Dragon. Not endorsed by Riot Games.
       </footer>
     </div>

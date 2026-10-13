@@ -16,3 +16,7 @@ dist-ssr
 .env.*
 !.env.example
 .claude/*
+# Impeccable scratch output (sketches, review captures, decision-page logs)
+.impeccable/mocks/
+.impeccable/review/
+.impeccable/questions/

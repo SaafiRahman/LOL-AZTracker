@@ -24,6 +24,6 @@ export const FILTERS = [
   { key: 'all', label: 'All' },
   { key: 'remaining', label: 'Remaining' },
   { key: 'inprogress', label: 'In progress' },
-  { key: 'completed', label: 'Completed' },
+  { key: 'completed', label: 'Done' },
   { key: 'won', label: 'Won' },
 ]

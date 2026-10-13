@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import Icon from './Icon.jsx'
 
 // One row in a champion's game log. K/D/A shows as plain text by default with a
 // pencil affordance on hover; clicking it reveals the editable number fields.
@@ -13,7 +14,7 @@ export default function GameRow({ game, index, isWinGame, championName, onUpdate
     <li className={`game-row game-${result}`}>
       <span className="game-num">#{index + 1}</span>
       <span className={`game-badge badge-${result}`}>{result === 'win' ? 'Win' : 'Loss'}</span>
-      {isWinGame && <span className="game-flag">🏆 win game</span>}
+      {isWinGame && <span className="game-flag">Winning game</span>}
 
       {editing ? (
         <span className="game-kda editing">
@@ -54,7 +55,7 @@ export default function GameRow({ game, index, isWinGame, championName, onUpdate
             onClick={() => setEditing(false)}
             aria-label="Done editing K/D/A"
           >
-            ✓
+            <Icon name="check" size={16} />
           </button>
         </span>
       ) : (
@@ -71,7 +72,6 @@ export default function GameRow({ game, index, isWinGame, championName, onUpdate
           ) : (
             <span className="kda-add">+ KDA</span>
           )}
-          <span className="kda-edit-icon" aria-hidden="true">✎</span>
         </button>
       )}
 
@@ -89,7 +89,7 @@ export default function GameRow({ game, index, isWinGame, championName, onUpdate
         aria-label={`Remove game ${index + 1} for ${championName}`}
         onClick={() => onRemoveGame(id)}
       >
-        ×
+        <Icon name="close" size={16} />
       </button>
     </li>
   )

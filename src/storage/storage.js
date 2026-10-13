@@ -133,10 +133,13 @@ export function normalizeRun(raw) {
   }
 }
 
-// The saved Riot account for auto-import, or null.
+// The saved Riot account for auto-import, or null. `queueKey` is the queue
+// filter used on the last import (absent on accounts saved before it existed).
 function normalizeRiotAccount(raw) {
   if (!raw || !raw.gameName || !raw.tagLine || !raw.region) return null
-  return { gameName: raw.gameName, tagLine: raw.tagLine, region: raw.region }
+  const account = { gameName: raw.gameName, tagLine: raw.tagLine, region: raw.region }
+  if (typeof raw.queueKey === 'string') account.queueKey = raw.queueKey
+  return account
 }
 
 // Turn any persisted shape into { activeRunId, runs, riotAccount } with >=1 run.

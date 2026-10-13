@@ -1,0 +1,602 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-13T00:09:15.634Z",
+  "title": "Design System: LoL A–Z Challenge Tracker",
+  "extensions": {
+    "colorMeta": {
+      "hex-black": {
+        "role": "neutral",
+        "displayName": "Void Black",
+        "canonical": "#010a13",
+        "oklch": "oklch(13.8% 0.028 240.3)",
+        "tonalRamp": [
+          "oklch(15% 0.028 240.3)",
+          "oklch(26% 0.028 240.3)",
+          "oklch(37% 0.028 240.3)",
+          "oklch(48% 0.028 240.3)",
+          "oklch(59% 0.028 240.3)",
+          "oklch(70% 0.028 240.3)",
+          "oklch(82% 0.028 240.3)",
+          "oklch(95% 0.028 240.3)"
+        ]
+      },
+      "hex-navy": {
+        "role": "neutral",
+        "displayName": "Hextech Navy",
+        "canonical": "#0a1428",
+        "oklch": "oklch(19.4% 0.043 262.9)",
+        "tonalRamp": [
+          "oklch(15% 0.043 262.9)",
+          "oklch(26% 0.043 262.9)",
+          "oklch(37% 0.043 262.9)",
+          "oklch(48% 0.043 262.9)",
+          "oklch(59% 0.043 262.9)",
+          "oklch(70% 0.043 262.9)",
+          "oklch(82% 0.043 262.9)",
+          "oklch(95% 0.043 262.9)"
+        ]
+      },
+      "hex-panel": {
+        "role": "neutral",
+        "displayName": "Panel Navy",
+        "canonical": "#0a1a2f",
+        "oklch": "oklch(21.6% 0.047 256.0)",
+        "tonalRamp": [
+          "oklch(15% 0.047 256.0)",
+          "oklch(26% 0.047 256.0)",
+          "oklch(37% 0.047 256.0)",
+          "oklch(48% 0.047 256.0)",
+          "oklch(59% 0.047 256.0)",
+          "oklch(70% 0.047 256.0)",
+          "oklch(82% 0.047 256.0)",
+          "oklch(95% 0.047 256.0)"
+        ]
+      },
+      "hex-panel-2": {
+        "role": "neutral",
+        "displayName": "Deep Panel",
+        "canonical": "#071523",
+        "oklch": "oklch(19.1% 0.035 249.6)",
+        "tonalRamp": [
+          "oklch(15% 0.035 249.6)",
+          "oklch(26% 0.035 249.6)",
+          "oklch(37% 0.035 249.6)",
+          "oklch(48% 0.035 249.6)",
+          "oklch(59% 0.035 249.6)",
+          "oklch(70% 0.035 249.6)",
+          "oklch(82% 0.035 249.6)",
+          "oklch(95% 0.035 249.6)"
+        ]
+      },
+      "hex-raise": {
+        "role": "neutral",
+        "displayName": "Raised Navy",
+        "canonical": "#0e2138",
+        "oklch": "oklch(24.5% 0.051 254.4)",
+        "tonalRamp": [
+          "oklch(15% 0.051 254.4)",
+          "oklch(26% 0.051 254.4)",
+          "oklch(37% 0.051 254.4)",
+          "oklch(48% 0.051 254.4)",
+          "oklch(59% 0.051 254.4)",
+          "oklch(70% 0.051 254.4)",
+          "oklch(82% 0.051 254.4)",
+          "oklch(95% 0.051 254.4)"
+        ]
+      },
+      "gold": {
+        "role": "primary",
+        "displayName": "Hextech Gold",
+        "canonical": "#c8aa6e",
+        "oklch": "oklch(75.1% 0.086 83.9)",
+        "tonalRamp": [
+          "oklch(15% 0.086 83.9)",
+          "oklch(26% 0.086 83.9)",
+          "oklch(37% 0.086 83.9)",
+          "oklch(48% 0.086 83.9)",
+          "oklch(59% 0.086 83.9)",
+          "oklch(70% 0.086 83.9)",
+          "oklch(82% 0.086 83.9)",
+          "oklch(95% 0.086 83.9)"
+        ]
+      },
+      "gold-bright": {
+        "role": "primary",
+        "displayName": "Pale Gold Parchment",
+        "canonical": "#f0e6d2",
+        "oklch": "oklch(92.8% 0.029 84.6)",
+        "tonalRamp": [
+          "oklch(15% 0.029 84.6)",
+          "oklch(26% 0.029 84.6)",
+          "oklch(37% 0.029 84.6)",
+          "oklch(48% 0.029 84.6)",
+          "oklch(59% 0.029 84.6)",
+          "oklch(70% 0.029 84.6)",
+          "oklch(82% 0.029 84.6)",
+          "oklch(95% 0.029 84.6)"
+        ]
+      },
+      "gold-dim": {
+        "role": "primary",
+        "displayName": "Burnished Gold",
+        "canonical": "#8a6a35",
+        "oklch": "oklch(54.5% 0.081 78.3)",
+        "tonalRamp": [
+          "oklch(15% 0.081 78.3)",
+          "oklch(26% 0.081 78.3)",
+          "oklch(37% 0.081 78.3)",
+          "oklch(48% 0.081 78.3)",
+          "oklch(59% 0.081 78.3)",
+          "oklch(70% 0.081 78.3)",
+          "oklch(82% 0.081 78.3)",
+          "oklch(95% 0.081 78.3)"
+        ]
+      },
+      "gold-line": {
+        "role": "primary",
+        "displayName": "Engraved Line",
+        "canonical": "#463714",
+        "oklch": "oklch(34.5% 0.055 85.9)",
+        "tonalRamp": [
+          "oklch(15% 0.055 85.9)",
+          "oklch(26% 0.055 85.9)",
+          "oklch(37% 0.055 85.9)",
+          "oklch(48% 0.055 85.9)",
+          "oklch(59% 0.055 85.9)",
+          "oklch(70% 0.055 85.9)",
+          "oklch(82% 0.055 85.9)",
+          "oklch(95% 0.055 85.9)"
+        ]
+      },
+      "gold-hair": {
+        "role": "primary",
+        "displayName": "Hairline Gold",
+        "canonical": "#2b2412",
+        "oklch": "oklch(26.3% 0.032 88.9)",
+        "tonalRamp": [
+          "oklch(15% 0.032 88.9)",
+          "oklch(26% 0.032 88.9)",
+          "oklch(37% 0.032 88.9)",
+          "oklch(48% 0.032 88.9)",
+          "oklch(59% 0.032 88.9)",
+          "oklch(70% 0.032 88.9)",
+          "oklch(82% 0.032 88.9)",
+          "oklch(95% 0.032 88.9)"
+        ]
+      },
+      "blue": {
+        "role": "secondary",
+        "displayName": "Deep Teal",
+        "canonical": "#0596aa",
+        "oklch": "oklch(61.8% 0.107 211.3)",
+        "tonalRamp": [
+          "oklch(15% 0.107 211.3)",
+          "oklch(26% 0.107 211.3)",
+          "oklch(37% 0.107 211.3)",
+          "oklch(48% 0.107 211.3)",
+          "oklch(59% 0.107 211.3)",
+          "oklch(70% 0.107 211.3)",
+          "oklch(82% 0.107 211.3)",
+          "oklch(95% 0.107 211.3)"
+        ]
+      },
+      "blue-bright": {
+        "role": "secondary",
+        "displayName": "Hextech Teal",
+        "canonical": "#0ac8e6",
+        "oklch": "oklch(76.6% 0.133 213.7)",
+        "tonalRamp": [
+          "oklch(15% 0.133 213.7)",
+          "oklch(26% 0.133 213.7)",
+          "oklch(37% 0.133 213.7)",
+          "oklch(48% 0.133 213.7)",
+          "oklch(59% 0.133 213.7)",
+          "oklch(70% 0.133 213.7)",
+          "oklch(82% 0.133 213.7)",
+          "oklch(95% 0.133 213.7)"
+        ]
+      },
+      "win": {
+        "role": "tertiary",
+        "displayName": "Victory Green",
+        "canonical": "#2ee08a",
+        "oklch": "oklch(80.2% 0.184 155.9)",
+        "tonalRamp": [
+          "oklch(15% 0.160 155.9)",
+          "oklch(26% 0.160 155.9)",
+          "oklch(37% 0.160 155.9)",
+          "oklch(48% 0.160 155.9)",
+          "oklch(59% 0.160 155.9)",
+          "oklch(70% 0.160 155.9)",
+          "oklch(82% 0.160 155.9)",
+          "oklch(95% 0.160 155.9)"
+        ]
+      },
+      "loss": {
+        "role": "tertiary",
+        "displayName": "Defeat Red",
+        "canonical": "#ff6b78",
+        "oklch": "oklch(71.4% 0.180 17.6)",
+        "tonalRamp": [
+          "oklch(15% 0.160 17.6)",
+          "oklch(26% 0.160 17.6)",
+          "oklch(37% 0.160 17.6)",
+          "oklch(48% 0.160 17.6)",
+          "oklch(59% 0.160 17.6)",
+          "oklch(70% 0.160 17.6)",
+          "oklch(82% 0.160 17.6)",
+          "oklch(95% 0.160 17.6)"
+        ]
+      },
+      "text": {
+        "role": "neutral",
+        "displayName": "Parchment Text",
+        "canonical": "#e6e0d0",
+        "oklch": "oklch(90.7% 0.022 89.8)",
+        "tonalRamp": [
+          "oklch(15% 0.022 89.8)",
+          "oklch(26% 0.022 89.8)",
+          "oklch(37% 0.022 89.8)",
+          "oklch(48% 0.022 89.8)",
+          "oklch(59% 0.022 89.8)",
+          "oklch(70% 0.022 89.8)",
+          "oklch(82% 0.022 89.8)",
+          "oklch(95% 0.022 89.8)"
+        ]
+      },
+      "text-dim": {
+        "role": "neutral",
+        "displayName": "Dim Text",
+        "canonical": "#a8a293",
+        "oklch": "oklch(71.3% 0.022 88.8)",
+        "tonalRamp": [
+          "oklch(15% 0.022 88.8)",
+          "oklch(26% 0.022 88.8)",
+          "oklch(37% 0.022 88.8)",
+          "oklch(48% 0.022 88.8)",
+          "oklch(59% 0.022 88.8)",
+          "oklch(70% 0.022 88.8)",
+          "oklch(82% 0.022 88.8)",
+          "oklch(95% 0.022 88.8)"
+        ]
+      },
+      "text-faint": {
+        "role": "neutral",
+        "displayName": "Faint Text",
+        "canonical": "#8d8878",
+        "oklch": "oklch(62.6% 0.024 92.6)",
+        "tonalRamp": [
+          "oklch(15% 0.024 92.6)",
+          "oklch(26% 0.024 92.6)",
+          "oklch(37% 0.024 92.6)",
+          "oklch(48% 0.024 92.6)",
+          "oklch(59% 0.024 92.6)",
+          "oklch(70% 0.024 92.6)",
+          "oklch(82% 0.024 92.6)",
+          "oklch(95% 0.024 92.6)"
+        ]
+      },
+      "hex-rule": {
+        "role": "Ledger row dividers.",
+        "displayName": "Rule Navy",
+        "canonical": "#10203a",
+        "oklch": "oklch(24.5% 0.054 259.7)",
+        "tonalRamp": [
+          "oklch(15% 0.054 259.7)",
+          "oklch(26% 0.054 259.7)",
+          "oklch(37% 0.054 259.7)",
+          "oklch(48% 0.054 259.7)",
+          "oklch(59% 0.054 259.7)",
+          "oklch(70% 0.054 259.7)",
+          "oklch(82% 0.054 259.7)",
+          "oklch(95% 0.054 259.7)"
+        ]
+      },
+      "hex-track": {
+        "role": "Empty part of each A→Z segment, on the page and the share card.",
+        "displayName": "Track Navy",
+        "canonical": "#1a2a3c",
+        "oklch": "oklch(28.0% 0.040 252.1)",
+        "tonalRamp": [
+          "oklch(15% 0.040 252.1)",
+          "oklch(26% 0.040 252.1)",
+          "oklch(37% 0.040 252.1)",
+          "oklch(48% 0.040 252.1)",
+          "oklch(59% 0.040 252.1)",
+          "oklch(70% 0.040 252.1)",
+          "oklch(82% 0.040 252.1)",
+          "oklch(95% 0.040 252.1)"
+        ]
+      },
+      "hex-empty": {
+        "role": "An unfilled rating star.",
+        "displayName": "Empty Star",
+        "canonical": "#3a4c63",
+        "oklch": "oklch(41.1% 0.045 254.8)",
+        "tonalRamp": [
+          "oklch(15% 0.045 254.8)",
+          "oklch(26% 0.045 254.8)",
+          "oklch(37% 0.045 254.8)",
+          "oklch(48% 0.045 254.8)",
+          "oklch(59% 0.045 254.8)",
+          "oklch(70% 0.045 254.8)",
+          "oklch(82% 0.045 254.8)",
+          "oklch(95% 0.045 254.8)"
+        ]
+      },
+      "loss-ink": {
+        "role": "Body text inside the loss-tinted import error box.",
+        "displayName": "Blush Ink",
+        "canonical": "#ffd2d6",
+        "oklch": "oklch(90.3% 0.051 12.1)",
+        "tonalRamp": [
+          "oklch(15% 0.051 12.1)",
+          "oklch(26% 0.051 12.1)",
+          "oklch(37% 0.051 12.1)",
+          "oklch(48% 0.051 12.1)",
+          "oklch(59% 0.051 12.1)",
+          "oklch(70% 0.051 12.1)",
+          "oklch(82% 0.051 12.1)",
+          "oklch(95% 0.051 12.1)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "The current champion's name in the Spotlight only."
+      },
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Section heads (Trophy shelf, roster); About and settings legends are smaller steps of the same face."
+      },
+      "letter-divider": {
+        "displayName": "Letter divider",
+        "purpose": "A–Z divider rows in the roster ledger, in gold."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Spotlight subtitle line and import recap summary."
+      },
+      "name": {
+        "displayName": "Name",
+        "purpose": "Champion names in roster rows and recap items."
+      },
+      "stat": {
+        "displayName": "Stat",
+        "purpose": "Record and last-game figures in the Spotlight, tabular."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Running text, meta lines, table cells."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Small buttons, chips, segments, table headers."
+      },
+      "field-label": {
+        "displayName": "Field label",
+        "purpose": "Label above every form field, dim."
+      }
+    },
+    "shadows": [
+      {
+        "name": "panel-drop",
+        "value": "0 10px 30px -12px rgba(0, 0, 0, 0.7)",
+        "purpose": "Run settings panel."
+      },
+      {
+        "name": "toast-drop",
+        "value": "0 16px 40px -12px rgba(0, 0, 0, 0.8)",
+        "purpose": "Bottom toast."
+      },
+      {
+        "name": "dialog-drop",
+        "value": "0 24px 60px -20px rgba(0, 0, 0, 0.9)",
+        "purpose": "Share dialog, over an 82% Void Black overlay."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-out",
+        "value": "cubic-bezier(0.16, 1, 0.3, 1)",
+        "purpose": "The single easing for every transition and reveal."
+      },
+      {
+        "name": "hover",
+        "value": "160ms",
+        "purpose": "Button and control hover transitions (160–200ms; chevrons 200ms, shelf lift 180ms)."
+      },
+      {
+        "name": "rise",
+        "value": "260ms, translateY(6px) + fade",
+        "purpose": "Run settings, import options, roster detail reveal; the recap uses 360ms."
+      },
+      {
+        "name": "spotlight-body-in",
+        "value": "620ms, translateY(14px) + blur(6px) + fade",
+        "purpose": "Spotlight text column on champion change."
+      },
+      {
+        "name": "spotlight-art-in",
+        "value": "900ms, scale(1.04) + fade",
+        "purpose": "Splash art on champion change."
+      },
+      {
+        "name": "track-fill",
+        "value": "700ms width",
+        "purpose": "A→Z track segment fill."
+      },
+      {
+        "name": "toast-in",
+        "value": "320ms, translateY(12px) + fade",
+        "purpose": "Toast entrance."
+      },
+      {
+        "name": "reduced-motion",
+        "value": "1ms",
+        "purpose": "Every animation and transition duration under prefers-reduced-motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "roster-trim",
+        "value": "1100px"
+      },
+      {
+        "name": "tablet",
+        "value": "860px"
+      },
+      {
+        "name": "mobile",
+        "value": "720px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary-lg",
+      "description": "The one gold-filled action in a region; the large size is the Spotlight Import.",
+      "html": "<button class=\"ds-btn ds-btn-primary ds-btn-lg\"><svg width=\"20\" height=\"20\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 3v12m0 0l-5-5m5 5l5-5M4 17v2a2 2 0 002 2h12a2 2 0 002-2v-2\"/></svg>Import new games</button>",
+      "css": ".ds-btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:40px;padding:8px 16px;border:1px solid var(--gold-line,#463714);border-radius:2px;background:transparent;color:var(--text,#e6e0d0);font:600 0.93rem/1.2 'Segoe UI',system-ui,sans-serif;cursor:pointer;transition:background-color 160ms cubic-bezier(0.16,1,0.3,1),border-color 160ms cubic-bezier(0.16,1,0.3,1),color 160ms cubic-bezier(0.16,1,0.3,1)} .ds-btn:focus-visible{outline:2px solid #c8aa6e;outline-offset:2px} .ds-btn-primary{background:var(--gold,#c8aa6e);border-color:var(--gold,#c8aa6e);color:var(--hex-black,#010a13)} .ds-btn-primary:hover{background:var(--gold-bright,#f0e6d2);border-color:var(--gold-bright,#f0e6d2)} .ds-btn-primary:disabled{opacity:0.55;cursor:progress} .ds-btn-lg{min-height:54px;padding:12px 26px;font-size:1.06rem}"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Secondary action beside a primary (Sign in, Copy).",
+      "html": "<button class=\"ds-btn-outline\">Sign in to sync</button>",
+      "css": ".ds-btn-outline{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:8px 16px;border:1px solid var(--gold-dim,#8a6a35);border-radius:2px;background:transparent;color:var(--gold-bright,#f0e6d2);font:600 0.93rem/1.2 'Segoe UI',system-ui,sans-serif;cursor:pointer;transition:border-color 160ms cubic-bezier(0.16,1,0.3,1)} .ds-btn-outline:hover{border-color:var(--gold,#c8aa6e)} .ds-btn-outline:focus-visible{outline:2px solid #c8aa6e;outline-offset:2px}"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Top-bar actions; gains a hairline and panel fill on hover or when active.",
+      "html": "<button class=\"ds-btn-ghost\"><svg width=\"18\" height=\"18\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M4 12v7a2 2 0 002 2h12a2 2 0 002-2v-7M16 6l-4-4-4 4M12 2v13\"/></svg>Share</button>",
+      "css": ".ds-btn-ghost{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:8px 16px;border:1px solid transparent;border-radius:2px;background:transparent;color:var(--text-dim,#a8a293);font:600 0.93rem/1.2 'Segoe UI',system-ui,sans-serif;cursor:pointer;transition:background-color 160ms cubic-bezier(0.16,1,0.3,1),border-color 160ms cubic-bezier(0.16,1,0.3,1),color 160ms cubic-bezier(0.16,1,0.3,1)} .ds-btn-ghost:hover{border-color:var(--gold-line,#463714);background:var(--hex-panel,#0a1a2f);color:var(--gold-bright,#f0e6d2)} .ds-btn-ghost:focus-visible{outline:2px solid #c8aa6e;outline-offset:2px}"
+    },
+    {
+      "name": "Win / Loss Buttons",
+      "kind": "button",
+      "refersTo": "button-win",
+      "description": "Manual logging, outlined in the signal color with a tint on hover.",
+      "html": "<div class=\"ds-log\"><button class=\"ds-btn-win\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 5v14M5 12h14\"/></svg>Win</button><button class=\"ds-btn-loss\"><svg width=\"16\" height=\"16\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\" aria-hidden=\"true\"><path d=\"M12 5v14M5 12h14\"/></svg>Loss</button></div>",
+      "css": ".ds-log{display:flex;gap:8px} .ds-btn-win,.ds-btn-loss{display:inline-flex;align-items:center;gap:8px;min-height:40px;padding:8px 16px;border:1px solid;border-radius:2px;background:transparent;font:600 0.93rem/1.2 'Segoe UI',system-ui,sans-serif;cursor:pointer;transition:background-color 160ms cubic-bezier(0.16,1,0.3,1),border-color 160ms cubic-bezier(0.16,1,0.3,1)} .ds-btn-win{border-color:rgba(46,224,138,0.5);color:var(--win,#2ee08a)} .ds-btn-win:hover{border-color:var(--win,#2ee08a);background:rgba(46,224,138,0.08)} .ds-btn-loss{border-color:rgba(255,107,120,0.5);color:var(--loss,#ff6b78)} .ds-btn-loss:hover{border-color:var(--loss,#ff6b78);background:rgba(255,107,120,0.08)} .ds-btn-win:focus-visible,.ds-btn-loss:focus-visible{outline:2px solid #c8aa6e;outline-offset:2px}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input",
+      "description": "Deep-panel field with a Marcellus label above.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Your Riot ID</span><input class=\"ds-input\" placeholder=\"Name#TAG\"></label>",
+      "css": ".ds-field{display:flex;flex-direction:column;gap:6px} .ds-field-label{font-family:Marcellus,Georgia,serif;font-size:0.87rem;color:var(--text-dim,#a8a293)} .ds-input{min-height:40px;padding:8px 12px;border:1px solid var(--gold-line,#463714);border-radius:2px;background:var(--hex-panel-2,#071523);color:var(--text,#e6e0d0);font:0.95rem 'Segoe UI',system-ui,sans-serif} .ds-input::placeholder{color:var(--text-faint,#8d8878)} .ds-input:hover{border-color:var(--gold-dim,#8a6a35)} .ds-input:focus-visible{outline:2px solid var(--gold,#c8aa6e);outline-offset:0;border-color:var(--gold,#c8aa6e)}"
+    },
+    {
+      "name": "Segmented Control",
+      "kind": "chip",
+      "refersTo": "segmented-selected",
+      "description": "Exclusive choice; the pressed segment fills gold.",
+      "html": "<div class=\"ds-seg\"><button aria-pressed=\"true\">Since last</button><button aria-pressed=\"false\">Last N</button><button aria-pressed=\"false\">Dates</button></div>",
+      "css": ".ds-seg{display:inline-flex;border:1px solid var(--gold-line,#463714);border-radius:2px} .ds-seg button{min-height:36px;padding:6px 14px;border:none;border-right:1px solid var(--gold-line,#463714);background:transparent;color:var(--text-dim,#a8a293);font:600 0.87rem 'Segoe UI',system-ui,sans-serif;cursor:pointer} .ds-seg button:last-child{border-right:none} .ds-seg button:hover{color:var(--gold-bright,#f0e6d2)} .ds-seg button[aria-pressed='true']{background:var(--gold,#c8aa6e);color:var(--hex-black,#010a13)} .ds-seg button:focus-visible{outline:2px solid #c8aa6e;outline-offset:2px}"
+    },
+    {
+      "name": "Filter Chip",
+      "kind": "chip",
+      "refersTo": "chip-selected",
+      "description": "Multi-select (class pool, role); selected turns teal.",
+      "html": "<div class=\"ds-chips\"><button class=\"ds-chip\" aria-pressed=\"true\">Mage</button><button class=\"ds-chip\" aria-pressed=\"false\">Tank</button></div>",
+      "css": ".ds-chips{display:flex;gap:6px} .ds-chip{min-height:36px;padding:6px 14px;border:1px solid var(--gold-line,#463714);border-radius:2px;background:transparent;color:var(--text-dim,#a8a293);font:600 0.87rem 'Segoe UI',system-ui,sans-serif;cursor:pointer} .ds-chip:hover{color:var(--gold-bright,#f0e6d2);border-color:var(--gold-dim,#8a6a35)} .ds-chip[aria-pressed='true']{border-color:var(--gold,#c8aa6e);background:var(--gold,#c8aa6e);color:var(--hex-black,#010a13)} .ds-chip:focus-visible{outline:2px solid #c8aa6e;outline-offset:2px}"
+    },
+    {
+      "name": "Top Bar",
+      "kind": "nav",
+      "refersTo": "button-ghost",
+      "description": "Slim app bar: Cinzel brand, quiet run switcher, ghost actions.",
+      "html": "<header class=\"ds-topbar\"><a class=\"ds-brand\" href=\"#\">A–Z Challenge Tracker</a><select class=\"ds-run\"><option>Main run</option></select><div class=\"ds-actions\"><button class=\"ds-ghost\">Run settings</button><button class=\"ds-ghost\">Share</button></div></header>",
+      "css": ".ds-topbar{display:flex;align-items:center;gap:16px;min-height:64px;padding:0 16px;border-bottom:1px solid var(--gold-line,#463714);background:var(--hex-black,#010a13)} .ds-brand{font:700 1.1rem Cinzel,Georgia,serif;letter-spacing:0.02em;color:var(--gold-bright,#f0e6d2);text-decoration:none} .ds-run{min-height:40px;border:1px solid transparent;background:transparent;color:var(--gold-bright,#f0e6d2);font:1rem Marcellus,Georgia,serif} .ds-actions{margin-left:auto;display:flex;gap:6px} .ds-ghost{min-height:40px;padding:8px 16px;border:1px solid transparent;border-radius:2px;background:transparent;color:var(--text-dim,#a8a293);font:600 0.93rem 'Segoe UI',system-ui,sans-serif;cursor:pointer} .ds-ghost:hover{border-color:var(--gold-line,#463714);background:var(--hex-panel,#0a1a2f);color:var(--gold-bright,#f0e6d2)} .ds-ghost:focus-visible,.ds-brand:focus-visible{outline:2px solid #c8aa6e;outline-offset:2px}"
+    },
+    {
+      "name": "A→Z Track",
+      "kind": "custom",
+      "refersTo": "gold",
+      "description": "Letter segments along the Spotlight bottom: gold when done, teal when current, faded when empty.",
+      "html": "<ol class=\"ds-track\"><li class=\"done\"><span>A</span><i><b style=\"width:100%\"></b></i></li><li class=\"done\"><span>B</span><i><b style=\"width:100%\"></b></i></li><li class=\"current\"><span>C</span><i><b style=\"width:40%\"></b></i></li><li><span>D</span><i><b style=\"width:0\"></b></i></li><li class=\"none\"><span>X</span><i><b style=\"width:0\"></b></i></li></ol>",
+      "css": ".ds-track{list-style:none;margin:0;padding:14px 16px 18px;display:grid;grid-template-columns:repeat(5,48px);gap:4px;background:var(--hex-panel-2,#071523)} .ds-track li{display:flex;flex-direction:column;align-items:center;gap:6px} .ds-track span{font:600 0.8rem Cinzel,Georgia,serif;color:var(--text-faint,#8d8878)} .ds-track i{display:block;width:100%;height:4px;background:#1a2a3c;overflow:hidden} .ds-track b{display:block;height:100%;background:var(--gold,#c8aa6e);transition:width 700ms cubic-bezier(0.16,1,0.3,1)} .ds-track .done span{color:var(--gold,#c8aa6e)} .ds-track .current span{color:var(--blue-bright,#0ac8e6)} .ds-track .current i{height:6px;background:rgba(10,200,230,0.25)} .ds-track .current b{background:var(--blue-bright,#0ac8e6)} .ds-track .none{opacity:0.35}"
+    },
+    {
+      "name": "Roster Row",
+      "kind": "custom",
+      "refersTo": "panel",
+      "description": "Ledger rows under a Cinzel letter divider; the current row takes a teal wash, done rows a gold icon frame.",
+      "html": "<table class=\"ds-ledger\"><tbody><tr class=\"ds-letter\"><th colspan=\"2\">C</th></tr><tr class=\"ds-row is-current\"><td class=\"n\">38</td><td><span class=\"ic\"></span><span class=\"nm\">Caitlyn</span> <span class=\"st\">Up next</span></td></tr><tr class=\"ds-row is-done\"><td class=\"n\">37</td><td><span class=\"ic\"></span><span class=\"nm\">Briar</span> <span class=\"ok\">Won in 2</span></td></tr></tbody></table>",
+      "css": ".ds-ledger{width:100%;border-collapse:collapse;font:15px/1.5 'Segoe UI',system-ui,sans-serif;font-variant-numeric:tabular-nums;background:var(--hex-black,#010a13);color:var(--text,#e6e0d0)} .ds-letter th{padding:22px 12px 6px;text-align:left;font:700 1.05rem Cinzel,Georgia,serif;color:var(--gold,#c8aa6e);border-bottom:1px solid var(--gold-hair,#2b2412)} .ds-row td{padding:6px 12px;border-bottom:1px solid #10203a;vertical-align:middle} .ds-row .n{width:52px;color:var(--text-faint,#8d8878)} .ds-row .ic{display:inline-block;width:32px;height:32px;margin-right:12px;vertical-align:middle;border:1px solid var(--gold-line,#463714);background:var(--hex-panel,#0a1a2f)} .ds-row .nm{font:1.05rem Marcellus,Georgia,serif} .ds-row.is-current td{background:rgba(10,200,230,0.07)} .ds-row.is-current .ic{border-color:var(--blue-bright,#0ac8e6)} .ds-row.is-current .st{color:var(--blue-bright,#0ac8e6);font-weight:600} .ds-row.is-done td{color:var(--text-dim,#a8a293)} .ds-row.is-done .ic{border-color:var(--gold,#c8aa6e)} .ds-row .ok{color:var(--win,#2ee08a)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Hextech Ledger",
+    "overview": "The tracker reads like an engraved ledger kept inside the League client: a near-black navy field, thin gold hairlines that rule the page into sections, and one champion's splash art bleeding in from the right as if lit from behind the glass. The current champion is the hero; everything else (the trophy shelf, the alphabet roster) sits beneath it as record-keeping. Density is calm at the top and tight below: the Spotlight breathes, the roster is a compact table with letter dividers.\n\nOrnament comes from type and line, never from effects. Cinzel carries names and section heads with carved, inscriptional weight; Marcellus softens labels and champion names; the platform sans handles every number and control, always with tabular figures. Color is almost entirely gold-on-navy, with three signals that each mean exactly one thing: teal is now (the current champion and anything live), green is a win, red is a loss.\n\nCorners are square or nearly so. Depth is drawn with hairlines and tonal steps, with a soft dark drop shadow only on surfaces that float above the page (Run settings, the toast, the share dialog).",
+    "keyCharacteristics": [
+      "Near-black navy ground with gold hairline rules dividing every region.",
+      "Splash art masked into the field from the right; a navy scrim keeps the text column clean.",
+      "Cinzel display at up to 6rem for the current champion; Marcellus for names and field labels; system sans with tabular figures for data.",
+      "Teal = current/live, green = win, red = loss; gold for everything structural and the primary action.",
+      "Square panels, 2px control corners, no nested cards.",
+      "Motion is a short rise on reveal and a slow fill on the A→Z track; all of it collapses under reduced motion."
+    ],
+    "rules": [
+      {
+        "name": "The One Meaning Rule",
+        "body": "Teal means now, green means won, red means lost. None of the three is used decoratively, and no fourth signal color exists.",
+        "section": "colors"
+      },
+      {
+        "name": "The Gold Fill Rule",
+        "body": "A solid gold fill marks the one primary action in its region (Import, Apply, Download) or the pressed segment of a segmented control. Everything else is outlined or ghosted.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tinted Signal Rule",
+        "body": "A signal color used as a background appears only as a low tint of itself (teal at 6–10%, green and red at 8%) behind a full-strength border or text of the same hue.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tabular Figures Rule",
+        "body": "Every number (positions, records, KDA, counts, dates in tables) is set with tabular figures, via the `num` utility or on the whole ledger.",
+        "section": "typography"
+      },
+      {
+        "name": "The Carved Names Rule",
+        "body": "Serif faces are for names and headings. Numbers, buttons and running text never use Cinzel.",
+        "section": "typography"
+      },
+      {
+        "name": "The Hairline-First Rule",
+        "body": "Separate regions with a 1px gold rule or a tonal step before reaching for a shadow. A shadow means the surface floats.",
+        "section": "elevation"
+      },
+      {
+        "name": "The No-Glow Rule",
+        "body": "Shadows are black, never colored. No glows around buttons, art or text.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do rule regions with 1px gold hairlines (Engraved Line, Hairline Gold) and step the navy tones for depth.",
+      "Do keep teal for the current champion and live state, green for wins, red for losses (The One Meaning Rule).",
+      "Do give each region at most one gold-filled action (The Gold Fill Rule).",
+      "Do set every number in tabular figures and every name or heading in Cinzel or Marcellus.",
+      "Do mask Data Dragon splash art into the field and back the text with a navy scrim so it never fights the controls.",
+      "Do use the shared ease-out and the short rise for reveals, and honor reduced motion."
+    ],
+    "donts": [
+      "Don't use gradient text, colored glows, or nested bordered cards.",
+      "Don't round panels or containers; controls stop at 2px.",
+      "Don't introduce a fourth accent hue or use teal, green or red as decoration.",
+      "Don't set numbers, buttons or body copy in Cinzel.",
+      "Don't add shadows to surfaces that sit in the page flow."
+    ]
+  }
+}
