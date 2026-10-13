@@ -1360,6 +1360,10 @@ p.spotlight-record {
   font-size: 0.87rem;
   color: var(--text-dim);
 }
+.footer-credit {
+  margin: 10px 0 0;
+  color: var(--text-dim);
+}
 .footer-sep {
   margin: 0 8px;
 }

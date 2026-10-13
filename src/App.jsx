@@ -570,6 +570,26 @@ export default function App() {
           ·
         </span>
         Champion data &amp; images © Riot Games, via Data Dragon. Not endorsed by Riot Games.
+        <p className="footer-credit">
+          Made by Saafi Rahman
+          <span className="footer-sep" aria-hidden="true">
+            ·
+          </span>
+          <a href="https://github.com/SaafiRahman" className="footer-link" target="_blank" rel="noopener noreferrer">
+            GitHub
+          </a>
+          <span className="footer-sep" aria-hidden="true">
+            ·
+          </span>
+          <a
+            href="https://www.linkedin.com/in/saafi-rahman/"
+            className="footer-link"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            LinkedIn
+          </a>
+        </p>
       </footer>
     </div>
   )
